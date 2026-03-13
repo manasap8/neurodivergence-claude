@@ -1,0 +1,2654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroLearn — Adaptive Learning for Everyone</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<style>
+/* ===== CSS VARIABLES & RESET ===== */
+:root {
+  --bg: #F7F4EF;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE8;
+  --border: #E0DBD4;
+  --text: #1A1714;
+  --text-muted: #6B6560;
+  --accent: #5B7FDB;
+  --accent2: #E8734A;
+  --accent3: #48B89F;
+  --accent4: #C96FBD;
+  --success: #4CAF7D;
+  --warning: #F5A623;
+  --radius: 16px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.14);
+  --font-size: 17px;
+  --line-height: 1.7;
+  --letter-spacing: 0.01em;
+  --font-body: 'Nunito', sans-serif;
+  --font-display: 'Lexend', sans-serif;
+  --spacing: 1.6;
+  --animation-speed: 0.3s;
+}
+
+/* ADHD Mode */
+body.mode-adhd {
+  --bg: #F5F9FF;
+  --surface: #FFFFFF;
+  --accent: #4169E1;
+  --font-size: 17px;
+}
+
+/* Dyslexia Mode */
+body.mode-dyslexia {
+  --bg: #FFF8EF;
+  --surface: #FFFDF7;
+  --text: #2C2416;
+  --font-size: 19px;
+  --line-height: 1.9;
+  --letter-spacing: 0.04em;
+  --accent: #5B7FDB;
+}
+
+/* Autism Mode */
+body.mode-autism {
+  --bg: #F4F7F4;
+  --surface: #FFFFFF;
+  --accent: #48B89F;
+  --accent2: #48B89F;
+  --font-size: 17px;
+  --line-height: 1.75;
+}
+
+/* Visual Mode */
+body.mode-visual {
+  --bg: #FFF5F8;
+  --surface: #FFFFFF;
+  --accent: #C96FBD;
+}
+
+/* High Contrast Mode */
+body.mode-highcontrast {
+  --bg: #000000;
+  --surface: #111111;
+  --surface2: #1A1A1A;
+  --border: #444444;
+  --text: #FFFFFF;
+  --text-muted: #CCCCCC;
+  --accent: #FFD700;
+  --accent2: #00FF88;
+  --accent3: #00BFFF;
+}
+
+/* Large Font Mode */
+body.font-large { --font-size: 20px; --line-height: 1.85; }
+body.font-xlarge { --font-size: 24px; --line-height: 2.0; }
+
+/* No Animation Mode */
+body.no-animation * { animation: none !important; transition: none !important; }
+
+/* Calm Mode */
+body.mode-calm {
+  --bg: #EFF4F7;
+  --accent: #6B9BB8;
+  --accent2: #87CEAB;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  letter-spacing: var(--letter-spacing);
+  background: var(--bg);
+  color: var(--text);
+  transition: background var(--animation-speed), color var(--animation-speed);
+  min-height: 100vh;
+}
+
+body.mode-dyslexia { font-family: 'Lexend', sans-serif; }
+
+/* ===== LAYOUT ===== */
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+
+/* ===== NAV ===== */
+nav {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-logo span { font-size: 28px; }
+
+.nav-links { display: flex; gap: 4px; }
+
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  background: var(--surface2);
+  color: var(--accent);
+}
+
+.nav-right { display: flex; align-items: center; gap: 12px; }
+
+.focus-mode-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.focus-mode-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+
+/* ===== MAIN CONTENT ===== */
+main { flex: 1; }
+
+/* ===== PAGES ===== */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== HERO ===== */
+.hero {
+  background: var(--surface);
+  padding: 60px 24px 40px;
+  text-align: center;
+  border-bottom: 2px solid var(--border);
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.hero h1 em { color: var(--accent); font-style: normal; }
+
+.hero p {
+  max-width: 600px;
+  margin: 0 auto 32px;
+  color: var(--text-muted);
+  font-size: clamp(15px, 2.5vw, 18px);
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.badge {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ===== COMFORT SELECTOR ===== */
+.comfort-section {
+  padding: 40px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+.comfort-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.comfort-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+  user-select: none;
+}
+
+.comfort-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.comfort-card.selected {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.comfort-card .icon { font-size: 32px; margin-bottom: 10px; display: block; }
+.comfort-card .label { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.comfort-card .desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+.apply-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.apply-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+/* ===== SUBJECTS GRID ===== */
+.subjects-section {
+  padding: 40px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.subject-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.subject-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--card-color, var(--accent));
+  transition: height 0.2s;
+}
+
+.subject-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--card-color, var(--accent));
+}
+
+.subject-card:hover::before { height: 6px; }
+
+.subject-icon { font-size: 36px; }
+.subject-title { font-weight: 800; font-size: 18px; font-family: var(--font-display); }
+.subject-desc { font-size: 13px; color: var(--text-muted); }
+.subject-chapters {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--card-color, var(--accent));
+  background: color-mix(in srgb, var(--card-color, var(--accent)) 12%, transparent);
+  padding: 3px 10px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+/* ===== LESSON PAGE ===== */
+.lesson-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - 64px);
+}
+
+.lesson-sidebar {
+  background: var(--surface);
+  border-right: 2px solid var(--border);
+  padding: 24px 16px;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.lesson-sidebar h3 {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding: 0 8px;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  margin-bottom: 2px;
+}
+
+.chapter-item:hover { background: var(--surface2); color: var(--text); }
+.chapter-item.active { background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent); }
+
+.chapter-item .check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.chapter-item.done .check {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+
+.lesson-content { padding: 32px; }
+
+.lesson-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+}
+
+.lesson-title-area h2 {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.lesson-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lesson-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.lesson-actions { display: flex; gap: 8px; }
+
+.tool-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-btn:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+.tool-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* ===== PROGRESS BAR ===== */
+.progress-wrap {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.progress-bar-outer {
+  flex: 1;
+  height: 12px;
+  background: var(--surface2);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+.progress-label { font-size: 13px; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+
+/* ===== CONTENT CHUNKS ===== */
+.content-chunk {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  animation: fadeUp 0.3s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.content-chunk h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--accent);
+}
+
+.content-chunk p {
+  color: var(--text);
+  max-width: 680px;
+}
+
+.content-chunk.highlight {
+  border-color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 6%, var(--surface));
+}
+
+.key-word {
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-bottom: 2px solid var(--accent);
+  padding: 1px 3px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.key-word:hover { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+
+/* TTS highlight */
+.tts-highlight { background: #FFE566; border-radius: 3px; }
+
+/* ===== IMAGE CARD ===== */
+.visual-card {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  text-align: center;
+  margin: 16px 0;
+  border: 1.5px dashed var(--border);
+}
+
+.visual-card .visual-icon { font-size: 64px; line-height: 1; display: block; margin-bottom: 8px; }
+.visual-card .visual-caption { font-size: 13px; color: var(--text-muted); }
+
+/* ===== QUIZ ===== */
+.quiz-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
+.quiz-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  margin-bottom: 18px;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quiz-option {
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.quiz-option:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--surface)); }
+.quiz-option.correct { border-color: var(--success); background: color-mix(in srgb, var(--success) 10%, var(--surface)); color: #1a5c2e; }
+.quiz-option.wrong { border-color: #e74c3c; background: color-mix(in srgb, #e74c3c 10%, var(--surface)); color: #7b1c1c; }
+.quiz-option:disabled { cursor: not-allowed; }
+
+.quiz-feedback {
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  display: none;
+}
+
+.quiz-feedback.show { display: block; animation: fadeUp 0.2s ease; }
+.quiz-feedback.correct-fb { background: #e8f8ec; border: 1.5px solid var(--success); color: #1a5c2e; }
+.quiz-feedback.wrong-fb { background: #fde8e8; border: 1.5px solid #e74c3c; color: #7b1c1c; }
+
+/* ===== FLASHCARD ===== */
+.flashcard-wrap { perspective: 1000px; margin: 20px auto; max-width: 480px; }
+
+.flashcard {
+  width: 100%;
+  height: 220px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+
+.flashcard.flipped { transform: rotateY(180deg); }
+
+.fc-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  border: 2px solid var(--border);
+}
+
+.fc-front { background: var(--surface); }
+.fc-back { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); transform: rotateY(180deg); border-color: var(--accent); }
+
+.fc-label { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+.fc-text { font-size: 18px; font-weight: 700; font-family: var(--font-display); }
+
+.fc-nav { display: flex; justify-content: center; gap: 10px; margin-top: 12px; }
+.fc-nav button {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  padding: 8px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.fc-nav button:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== POMODORO TIMER ===== */
+.pomodoro-wrap {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  text-align: center;
+  max-width: 320px;
+  margin: 0 auto 24px;
+}
+
+.pomodoro-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pomodoro-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.pomodoro-ring .ring-bg { fill: none; stroke: var(--surface2); stroke-width: 8; }
+.pomodoro-ring .ring-progress { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+.pomodoro-time { font-size: 32px; font-weight: 800; font-family: var(--font-display); position: relative; z-index: 1; }
+
+.pomo-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; }
+
+.pomo-btns { display: flex; gap: 10px; justify-content: center; }
+.pomo-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pomo-btn.secondary { background: var(--surface2); color: var(--text); }
+.pomo-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+
+.pomo-sessions { display: flex; gap: 6px; justify-content: center; margin-top: 14px; }
+.pomo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); transition: all 0.3s; }
+.pomo-dot.done { background: var(--accent); border-color: var(--accent); }
+
+/* ===== REWARDS ===== */
+.reward-banner {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: var(--surface);
+  border: 2px solid var(--accent3);
+  border-radius: var(--radius);
+  padding: 16px 28px;
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(.175,.885,.32,1.275);
+  pointer-events: none;
+  min-width: 260px;
+}
+
+.reward-banner.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.reward-banner .reward-icon { font-size: 36px; display: block; margin-bottom: 6px; }
+.reward-banner .reward-title { font-weight: 800; font-size: 16px; font-family: var(--font-display); }
+.reward-banner .reward-sub { font-size: 13px; color: var(--text-muted); }
+
+/* ===== XP STRIP ===== */
+.xp-strip {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.xp-icon { font-size: 24px; }
+.xp-info { flex: 1; }
+.xp-label { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.xp-bar-outer { height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+.xp-bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent4), var(--accent)); border-radius: 4px; transition: width 0.5s ease; }
+.xp-count { font-weight: 800; font-size: 18px; font-family: var(--font-display); color: var(--accent4); }
+
+/* ===== CHATBOT ===== */
+.chatbot-wrap {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 150;
+}
+
+.chatbot-toggle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chatbot-toggle:hover { transform: scale(1.1); }
+
+.chatbot-window {
+  position: absolute;
+  bottom: 68px;
+  right: 0;
+  width: 320px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeUp 0.2s ease;
+}
+
+.chatbot-window.open { display: flex; }
+
+.chatbot-header {
+  background: var(--accent);
+  color: white;
+  padding: 14px 16px;
+  font-weight: 700;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatbot-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; line-height: 1; }
+
+.chatbot-messages {
+  flex: 1;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.msg {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  animation: fadeUp 0.2s ease;
+}
+
+.msg.bot {
+  background: var(--surface2);
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+}
+
+.msg.user {
+  background: var(--accent);
+  color: white;
+  border-bottom-right-radius: 4px;
+  align-self: flex-end;
+}
+
+.msg.thinking { opacity: 0.6; font-style: italic; }
+
+.chatbot-input {
+  padding: 10px 12px;
+  border-top: 1.5px solid var(--border);
+  display: flex;
+  gap: 8px;
+}
+
+.chatbot-input input {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+
+.chatbot-input input:focus { border-color: var(--accent); }
+
+.chatbot-input button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* ===== SETTINGS PANEL ===== */
+.settings-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.settings-group {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.settings-group-title {
+  padding: 14px 20px;
+  background: var(--surface2);
+  border-bottom: 1.5px solid var(--border);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.settings-row {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  gap: 16px;
+}
+
+.settings-row:last-child { border-bottom: none; }
+.settings-row-label { font-weight: 600; font-size: 15px; }
+.settings-row-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* Toggle Switch */
+.toggle {
+  width: 44px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggle.on { background: var(--accent); }
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle.on::after { left: 23px; }
+
+/* Select */
+.settings-select {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+}
+.settings-select:focus { border-color: var(--accent); }
+
+/* ===== DASHBOARD PAGE ===== */
+.dashboard-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.stat-value { font-size: 26px; font-weight: 800; font-family: var(--font-display); }
+.stat-label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+.dashboard-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 640px) {
+  .dashboard-row { grid-template-columns: 1fr; }
+  .lesson-layout { grid-template-columns: 1fr; }
+  .lesson-sidebar { display: none; }
+  .nav-links { display: none; }
+}
+
+/* ===== MIND MAP ===== */
+.mindmap-wrap {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  overflow-x: auto;
+}
+
+/* ===== TTS BAR ===== */
+.tts-bar {
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.tts-bar button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 5px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.tts-bar button:hover { transform: translateY(-1px); }
+
+/* ===== WORD TOOLTIP ===== */
+.word-tooltip {
+  position: fixed;
+  background: var(--text);
+  color: var(--bg);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  max-width: 240px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  line-height: 1.5;
+}
+
+.word-tooltip.show { opacity: 1; }
+
+/* ===== CONFETTI ===== */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 999;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== FOCUS MODE ===== */
+body.focus-mode nav .nav-links,
+body.focus-mode nav .nav-right { display: none; }
+body.focus-mode .lesson-sidebar { display: none; }
+body.focus-mode .lesson-content { grid-column: 1 / -1; max-width: 720px; margin: 0 auto; }
+body.focus-mode .chatbot-wrap { display: none; }
+body.focus-mode .lesson-layout { grid-template-columns: 1fr; }
+
+/* ===== VOICE CHIP ===== */
+.voice-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 4px 4px 0 0;
+}
+
+.voice-chip:hover { border-color: var(--accent); color: var(--accent); }
+.voice-chip.speaking { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+
+/* ===== EMPTY STATES ===== */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+.empty-state p { font-size: 15px; }
+
+/* ===== SCROLL ANIMATIONS ===== */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.scroll-reveal.visible { opacity: 1; transform: none; }
+
+/* ===== STREAK ===== */
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #FF6B35, #FF9A00);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ===== INLINE NOTIFICATION ===== */
+.inline-note {
+  background: color-mix(in srgb, var(--accent3) 12%, var(--surface));
+  border-left: 4px solid var(--accent3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin: 12px 0;
+  color: var(--text);
+}
+
+/* ===== SMOOTH TRANSITIONS ===== */
+.page { animation: fadeUp 0.25s ease; }
+
+/* ===== DYSLEXIA FONT ===== */
+body.use-opendyslexic {
+  font-family: 'Lexend', sans-serif;
+  letter-spacing: 0.05em;
+}
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a class="nav-logo" href="#" onclick="showPage('home')">
+    <span>🧠</span> NeuroLearn
+  </a>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('home'); setActive(this)">Home</button>
+    <button class="nav-btn" onclick="showPage('subjects'); setActive(this)">Subjects</button>
+    <button class="nav-btn" onclick="showPage('dashboard'); setActive(this)">My Progress</button>
+    <button class="nav-btn" onclick="showPage('settings'); setActive(this)">⚙️ Settings</button>
+  </div>
+  <div class="nav-right">
+    <span class="streak-badge">🔥 <span id="streakNum">3</span> day streak</span>
+    <button class="focus-mode-btn" onclick="toggleFocusMode()">
+      <span id="focusIcon">🎯</span> <span id="focusLabel">Focus Mode</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== REWARD BANNER ===== -->
+<div class="reward-banner" id="rewardBanner">
+  <span class="reward-icon" id="rewardIcon">🏆</span>
+  <div class="reward-title" id="rewardTitle">Achievement Unlocked!</div>
+  <div class="reward-sub" id="rewardSub">Keep going, you're doing great!</div>
+</div>
+
+<!-- ===== WORD TOOLTIP ===== -->
+<div class="word-tooltip" id="wordTooltip"></div>
+
+<!-- ===== TTS Bar (appears in lesson) ===== -->
+<div class="tts-bar" id="ttsBar" style="display:none; max-width:1200px; margin: 8px auto; border-radius: var(--radius);">
+  🔊 Text-to-Speech Active
+  <button onclick="ttsReadPage()">▶ Read Page</button>
+  <button onclick="ttsPause()" id="ttsPauseBtn" style="background:var(--surface2);color:var(--text)">⏸ Pause</button>
+  <button onclick="ttsStop()" style="background:var(--surface2);color:var(--text)">⏹ Stop</button>
+  <span id="ttsStatus" style="margin-left:auto; opacity:0.7; font-size:12px;"></span>
+</div>
+
+<!-- ===== PAGES ===== -->
+
+<!-- HOME PAGE -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>Learning, <em>Your Way</em></h1>
+    <p>An adaptive learning platform that adjusts to how <em>you</em> think — not the other way around.</p>
+    <div class="hero-badges">
+      <span class="badge">✅ No diagnosis needed</span>
+      <span class="badge">🎯 ADHD friendly</span>
+      <span class="badge">📖 Dyslexia friendly</span>
+      <span class="badge">🌿 Autism friendly</span>
+      <span class="badge">🔊 Voice support</span>
+    </div>
+    <button class="apply-btn" onclick="showPage('subjects'); setActive(document.querySelectorAll('.nav-btn')[1])">
+      Start Learning →
+    </button>
+  </div>
+
+  <div class="comfort-section">
+    <div class="section-title">How do you feel right now?</div>
+    <div class="section-subtitle">Choose what feels right. You can change anytime.</div>
+
+    <div class="comfort-grid">
+      <div class="comfort-card" data-mode="adhd" onclick="selectComfort(this)">
+        <span class="icon">⚡</span>
+        <div class="label">Text feels overwhelming</div>
+        <div class="desc">I lose focus or feel scattered</div>
+      </div>
+      <div class="comfort-card" data-mode="dyslexia" onclick="selectComfort(this)">
+        <span class="icon">📖</span>
+        <div class="label">Text is hard to read</div>
+        <div class="desc">Letters blur or jump around</div>
+      </div>
+      <div class="comfort-card" data-mode="autism" onclick="selectComfort(this)">
+        <span class="icon">🌿</span>
+        <div class="label">Bright screens hurt my eyes</div>
+        <div class="desc">I prefer calm and predictable layouts</div>
+      </div>
+      <div class="comfort-card" data-mode="visual" onclick="selectComfort(this)">
+        <span class="icon">🖼️</span>
+        <div class="label">I prefer visuals & diagrams</div>
+        <div class="desc">Images help me understand better</div>
+      </div>
+      <div class="comfort-card" data-mode="calm" onclick="selectComfort(this)">
+        <span class="icon">🧘</span>
+        <div class="label">I want slow, simple explanations</div>
+        <div class="desc">Step by step at my own pace</div>
+      </div>
+      <div class="comfort-card" data-mode="default" onclick="selectComfort(this)">
+        <span class="icon">🙂</span>
+        <div class="label">I'm comfortable with standard</div>
+        <div class="desc">Default reading mode is fine</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px; display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+      <button class="voice-chip" onclick="voiceGuide('This interface adapts to your learning needs. Select what feels comfortable for you.')">
+        🔊 Hear instructions
+      </button>
+      <button class="voice-chip" onclick="voiceGuide('Choose how text should appear, and I will make the whole site easier for you.')">
+        🔊 What do these options mean?
+      </button>
+    </div>
+
+    <button class="apply-btn" onclick="applyComfort()">Apply & Start Learning 🚀</button>
+  </div>
+</div>
+
+<!-- SUBJECTS PAGE -->
+<div class="page" id="page-subjects">
+  <div class="subjects-section">
+    <div class="section-title" style="margin-bottom:4px;">Choose a Subject</div>
+    <div class="section-subtitle">Elementary level • Curricular & non-curricular</div>
+    <div class="subjects-grid" id="subjectsGrid"></div>
+  </div>
+</div>
+
+<!-- LESSON PAGE -->
+<div class="page" id="page-lesson">
+  <div class="lesson-layout">
+    <div class="lesson-sidebar" id="lessonSidebar">
+      <h3>Chapters</h3>
+      <div id="chapterList"></div>
+    </div>
+    <div class="lesson-content" id="lessonContent">
+      <!-- Filled dynamically -->
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div class="page" id="page-dashboard">
+  <div class="dashboard-wrap">
+    <div class="section-title" style="margin-bottom:20px;">My Learning Dashboard 📊</div>
+
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#E8F4FD;">📚</div>
+        <div>
+          <div class="stat-value" id="stat-lessons">0</div>
+          <div class="stat-label">Lessons Done</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#FDF4E8;">⭐</div>
+        <div>
+          <div class="stat-value" id="stat-xp">0</div>
+          <div class="stat-label">XP Earned</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#EDF8F1;">✅</div>
+        <div>
+          <div class="stat-value" id="stat-quizzes">0</div>
+          <div class="stat-label">Correct Answers</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#F5EEF8;">🔥</div>
+        <div>
+          <div class="stat-value" id="stat-streak">3</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-row">
+      <div>
+        <div class="section-title" style="font-size:17px; margin-bottom:14px;">Subject Progress</div>
+        <div id="subjectProgress"></div>
+      </div>
+      <div>
+        <div class="section-title" style="font-size:17px; margin-bottom:14px;">Focus Time Today</div>
+        <div class="pomodoro-wrap">
+          <div class="pomodoro-ring">
+            <svg viewBox="0 0 140 140">
+              <circle class="ring-bg" cx="70" cy="70" r="57"/>
+              <circle class="ring-progress" id="ringProgress" cx="70" cy="70" r="57"
+                stroke-dasharray="358" stroke-dashoffset="358"/>
+            </svg>
+            <div class="pomodoro-time" id="pomodoroTime">25:00</div>
+          </div>
+          <div class="pomo-label" id="pomodoroLabel">Focus Session</div>
+          <div class="pomo-btns">
+            <button class="pomo-btn" id="pomoBtnStart" onclick="pomoToggle()">▶ Start</button>
+            <button class="pomo-btn secondary" onclick="pomoReset()">↺ Reset</button>
+          </div>
+          <div class="pomo-sessions" id="pomoSessions"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" style="font-size:17px; margin-bottom:14px;">Concept Mind Map</div>
+    <div class="mindmap-wrap">
+      <div class="mermaid" id="mindMapDiagram">
+mindmap
+  root((My Learning))
+    Science
+      Plants
+      Animals
+      Earth
+    History
+      Ancient Civilizations
+      World Events
+    English
+      Grammar
+      Reading
+      Writing
+    Computer Science
+      Algorithms
+      Internet
+    Geography
+      Continents
+      Climate
+    General
+      Critical Thinking
+      Life Skills
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div class="page" id="page-settings">
+  <div class="settings-wrap">
+    <div class="section-title" style="margin-bottom:4px;">Accessibility Settings</div>
+    <div class="section-subtitle" style="margin-bottom:28px;">Personalise your experience anytime.</div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">🎨 Display Mode</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Comfort Mode</div>
+          <div class="settings-row-desc">Adapts colors, fonts and spacing</div>
+        </div>
+        <select class="settings-select" id="modeSelect" onchange="applyMode(this.value)">
+          <option value="default">Default</option>
+          <option value="adhd">ADHD — Minimal & Focused</option>
+          <option value="dyslexia">Dyslexia — Readable Fonts</option>
+          <option value="autism">Autism — Calm & Predictable</option>
+          <option value="visual">Visual Learner</option>
+          <option value="calm">Calm Mode</option>
+          <option value="highcontrast">High Contrast</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Font Size</div>
+          <div class="settings-row-desc">Make text bigger for easier reading</div>
+        </div>
+        <select class="settings-select" id="fontSizeSelect" onchange="applyFontSize(this.value)">
+          <option value="">Normal</option>
+          <option value="font-large">Large</option>
+          <option value="font-xlarge">Extra Large</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Dyslexia-friendly Font</div>
+          <div class="settings-row-desc">Use Lexend — designed for readability</div>
+        </div>
+        <div class="toggle" id="dyslexiaFontToggle" onclick="toggleDyslexiaFont(this)"></div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">♿ Accessibility Tools</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Text-to-Speech</div>
+          <div class="settings-row-desc">Read all lesson content aloud</div>
+        </div>
+        <div class="toggle" id="ttsToggle" onclick="toggleTTS(this)"></div>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Disable Animations</div>
+          <div class="settings-row-desc">Stop all moving elements</div>
+        </div>
+        <div class="toggle" id="animToggle" onclick="toggleAnimation(this)"></div>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Word Definitions on Click</div>
+          <div class="settings-row-desc">Tap highlighted words to see meaning</div>
+        </div>
+        <div class="toggle on" id="wordDefToggle" onclick="toggleWordDef(this)"></div>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Voice Guidance</div>
+          <div class="settings-row-desc">Speak interface hints aloud</div>
+        </div>
+        <div class="toggle" id="voiceGuideToggle" onclick="toggleVoiceGuide(this)"></div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">⏱️ Focus & Pacing</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Pomodoro Timer</div>
+          <div class="settings-row-desc">Study in timed sprints</div>
+        </div>
+        <select class="settings-select" id="pomoDurationSelect" onchange="setPomoDuration(this.value)">
+          <option value="15">15 min sessions</option>
+          <option value="20">20 min sessions</option>
+          <option value="25" selected>25 min sessions (default)</option>
+          <option value="30">30 min sessions</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-row-label">Chunk Content</div>
+          <div class="settings-row-desc">Show one section at a time</div>
+        </div>
+        <div class="toggle on" id="chunkToggle" onclick="toggleChunk(this)"></div>
+      </div>
+    </div>
+
+    <button class="apply-btn" style="margin-top:8px;" onclick="saveSettings()">💾 Save Settings</button>
+  </div>
+</div>
+
+</div><!-- #app -->
+
+<!-- ===== CHATBOT ===== -->
+<div class="chatbot-wrap">
+  <button class="chatbot-toggle" onclick="toggleChatbot()">🤖</button>
+  <div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+      🤖 NeuroBot — Ask me anything!
+      <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="msg bot">👋 Hi! I'm NeuroBot. I can explain concepts, help with quizzes, or simplify any text. What do you need?</div>
+      <div class="msg bot">Try: "Explain photosynthesis simply" or "What is a fraction?"</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatInput" placeholder="Ask me anything..." onkeydown="if(event.key==='Enter') sendChat()">
+      <button onclick="sendChat()">➤</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const SUBJECTS = [
+  {
+    id: 'science',
+    title: 'Science',
+    icon: '🔬',
+    desc: 'Discover how the natural world works',
+    color: '#48B89F',
+    chapters: [
+      { id: 'plants', title: 'Plants & Photosynthesis', done: false },
+      { id: 'animals', title: 'Animals & Habitats', done: false },
+      { id: 'earth', title: 'Earth & Solar System', done: false },
+      { id: 'matter', title: 'States of Matter', done: false },
+    ]
+  },
+  {
+    id: 'history',
+    title: 'History',
+    icon: '🏛️',
+    desc: 'Explore civilizations and world events',
+    color: '#E8734A',
+    chapters: [
+      { id: 'ancient', title: 'Ancient Civilizations', done: false },
+      { id: 'medieval', title: 'The Middle Ages', done: false },
+      { id: 'modern', title: 'Modern World History', done: false },
+    ]
+  },
+  {
+    id: 'english',
+    title: 'English',
+    icon: '📚',
+    desc: 'Reading, writing and grammar skills',
+    color: '#5B7FDB',
+    chapters: [
+      { id: 'grammar', title: 'Grammar Basics', done: false },
+      { id: 'reading', title: 'Reading Comprehension', done: false },
+      { id: 'writing', title: 'Creative Writing', done: false },
+    ]
+  },
+  {
+    id: 'cs',
+    title: 'Computer Science',
+    icon: '💻',
+    desc: 'Coding, internet and algorithms',
+    color: '#C96FBD',
+    chapters: [
+      { id: 'what-is-computer', title: 'What is a Computer?', done: false },
+      { id: 'internet', title: 'How the Internet Works', done: false },
+      { id: 'algorithms', title: 'Algorithms & Logic', done: false },
+    ]
+  },
+  {
+    id: 'geography',
+    title: 'Geography',
+    icon: '🌍',
+    desc: 'Countries, climates and continents',
+    color: '#6BB86B',
+    chapters: [
+      { id: 'continents', title: 'World Continents', done: false },
+      { id: 'climate', title: 'Climate & Weather', done: false },
+      { id: 'maps', title: 'Reading Maps', done: false },
+    ]
+  },
+  {
+    id: 'general',
+    title: 'General Knowledge',
+    icon: '🌟',
+    desc: 'Life skills and critical thinking',
+    color: '#F5A623',
+    chapters: [
+      { id: 'life-skills', title: 'Life Skills & Etiquette', done: false },
+      { id: 'critical', title: 'Critical Thinking', done: false },
+      { id: 'health', title: 'Health & Wellness', done: false },
+    ]
+  }
+];
+
+const LESSON_CONTENT = {
+  plants: {
+    title: 'Plants & Photosynthesis',
+    readTime: '8 min read',
+    chunks: [
+      {
+        type: 'intro',
+        heading: '🌿 What are Plants?',
+        text: `Plants are living things that <span class="key-word" data-def="Something that is alive, grows and responds to its environment">organisms</span> that make their own food using sunlight. They are found almost everywhere on Earth — from rainforests to deserts.`,
+        visual: { icon: '🌱', caption: 'A seedling growing from soil' }
+      },
+      {
+        type: 'key',
+        heading: '☀️ What is Photosynthesis?',
+        text: `<span class="key-word" data-def="The process by which plants use sunlight, water and carbon dioxide to make sugar and release oxygen">Photosynthesis</span> is the process plants use to make food. Think of it as a plant's kitchen! The plant takes in sunlight, water from the soil, and carbon dioxide from the air — and produces sugar (food) and oxygen.`,
+        note: '💡 The oxygen we breathe comes from plants doing photosynthesis!'
+      },
+      {
+        type: 'visual',
+        heading: '📊 The Photosynthesis Equation',
+        text: `Here is the simple formula: <strong>Sunlight + Water + Carbon Dioxide → Sugar + Oxygen</strong>`,
+        visual: { icon: '🌞➕💧➕🌬️ → 🍬➕💨', caption: 'Sunlight + Water + CO₂ → Sugar + Oxygen' }
+      },
+      {
+        type: 'text',
+        heading: '🌱 Parts of a Plant',
+        text: `Every plant has important parts: The <span class="key-word" data-def="Underground parts that absorb water and minerals">roots</span> absorb water. The <span class="key-word" data-def="The main stalk that supports the plant and carries water upward">stem</span> carries water up. The <span class="key-word" data-def="Green flat parts where photosynthesis happens">leaves</span> collect sunlight. The <span class="key-word" data-def="Colorful part that attracts insects for pollination">flower</span> helps make seeds.`
+      }
+    ],
+    flashcards: [
+      { front: 'What is photosynthesis?', back: 'The process plants use to make food using sunlight, water and CO₂.' },
+      { front: 'What do plants release during photosynthesis?', back: 'Oxygen — the air we breathe!' },
+      { front: 'Which part of the plant absorbs water?', back: 'The roots absorb water from the soil.' },
+      { front: 'What do leaves do?', back: 'Leaves collect sunlight for photosynthesis.' },
+      { front: 'What do plants produce as food?', back: 'Sugar (glucose) is the food plants produce.' }
+    ],
+    quiz: [
+      {
+        q: 'What do plants use to make their own food?',
+        options: ['Moon light and rain', 'Sunlight, water and CO₂', 'Soil, salt and water', 'Only sunlight'],
+        answer: 1,
+        explanation: 'Correct! Plants use sunlight, water, and carbon dioxide through the process called photosynthesis.'
+      },
+      {
+        q: 'Which gas do plants release during photosynthesis?',
+        options: ['Carbon Dioxide', 'Nitrogen', 'Oxygen', 'Hydrogen'],
+        answer: 2,
+        explanation: 'Plants release oxygen — which is what we need to breathe!'
+      },
+      {
+        q: 'Where does photosynthesis mainly happen?',
+        options: ['In the roots', 'In the stem', 'In the flower', 'In the leaves'],
+        answer: 3,
+        explanation: 'Leaves have green chlorophyll which captures sunlight for photosynthesis.'
+      }
+    ]
+  },
+  grammar: {
+    title: 'Grammar Basics',
+    readTime: '10 min read',
+    chunks: [
+      {
+        type: 'intro',
+        heading: '📝 What is Grammar?',
+        text: `<span class="key-word" data-def="The set of rules that govern how a language works">Grammar</span> is the set of rules that help us speak and write clearly. When we follow grammar rules, other people can understand us easily.`,
+        visual: { icon: '✍️', caption: 'Good grammar helps us communicate clearly' }
+      },
+      {
+        type: 'key',
+        heading: '🔤 Parts of Speech',
+        text: `Words have different jobs in a sentence. A <span class="key-word" data-def="A word that names a person, place, thing or idea — like 'dog', 'school', 'happiness'">noun</span> names things. A <span class="key-word" data-def="A word that describes an action — like 'run', 'eat', 'think'">verb</span> shows action. An <span class="key-word" data-def="A word that describes a noun — like 'big', 'happy', 'red'">adjective</span> describes things. An <span class="key-word" data-def="A word that describes a verb — like 'quickly', 'carefully', 'very'">adverb</span> describes how actions happen.`
+      },
+      {
+        type: 'text',
+        heading: '📌 Building a Sentence',
+        text: `Every sentence needs at minimum: a <strong>subject</strong> (who/what) and a <strong>predicate</strong> (what they do). Example: <em>"The dog runs fast."</em> — "The dog" is the subject, "runs fast" is the predicate.`
+      }
+    ],
+    flashcards: [
+      { front: 'What is a noun?', back: 'A word that names a person, place, thing or idea. E.g., dog, school, happiness.' },
+      { front: 'What is a verb?', back: 'A word that shows action or state. E.g., run, eat, is, think.' },
+      { front: 'What is an adjective?', back: 'A word that describes a noun. E.g., big, happy, red, beautiful.' },
+      { front: 'What does a sentence need?', back: 'A subject (who/what) and a predicate (what they do).' }
+    ],
+    quiz: [
+      {
+        q: 'Which word is a NOUN in: "The happy dog runs quickly"?',
+        options: ['happy', 'runs', 'dog', 'quickly'],
+        answer: 2,
+        explanation: '"Dog" is a noun — it names a thing (an animal).'
+      },
+      {
+        q: 'Which word is a VERB in: "She carefully painted the wall"?',
+        options: ['carefully', 'painted', 'wall', 'she'],
+        answer: 1,
+        explanation: '"Painted" is the verb — it shows the action that was done.'
+      }
+    ]
+  },
+  'what-is-computer': {
+    title: 'What is a Computer?',
+    readTime: '7 min read',
+    chunks: [
+      {
+        type: 'intro',
+        heading: '💻 What is a Computer?',
+        text: `A <span class="key-word" data-def="An electronic device that processes data and performs tasks based on instructions">computer</span> is an electronic machine that can store, process and display information. Computers follow instructions called <span class="key-word" data-def="A set of step-by-step instructions that tell a computer what to do">programs</span>.`,
+        visual: { icon: '💻', caption: 'A modern laptop computer' }
+      },
+      {
+        type: 'key',
+        heading: '🧩 Main Parts of a Computer',
+        text: `The <span class="key-word" data-def="Central Processing Unit — the 'brain' of the computer that does all the calculations">CPU</span> is the brain. <span class="key-word" data-def="Random Access Memory — temporary memory the computer uses while working">RAM</span> is short-term memory. The <span class="key-word" data-def="Hard Drive or SSD — permanent storage for files and programs">storage drive</span> keeps files forever. The <span class="key-word" data-def="What you see on screen — it shows the computer's output visually">monitor</span> shows output.`
+      },
+      {
+        type: 'text',
+        heading: '⌨️ Input & Output',
+        text: `Computers work with INPUT and OUTPUT. You give INPUT using a keyboard or mouse. The computer processes it and gives you OUTPUT on the screen or through speakers.`
+      }
+    ],
+    flashcards: [
+      { front: 'What does CPU stand for?', back: 'Central Processing Unit — the brain of the computer.' },
+      { front: 'What is RAM?', back: 'Random Access Memory — the computer\'s short-term working memory.' },
+      { front: 'What is an example of INPUT?', back: 'Typing on a keyboard or clicking a mouse are inputs.' },
+      { front: 'What is an example of OUTPUT?', back: 'Seeing something on screen or hearing sound from speakers.' }
+    ],
+    quiz: [
+      {
+        q: 'What is the "brain" of a computer called?',
+        options: ['RAM', 'Monitor', 'CPU', 'Keyboard'],
+        answer: 2,
+        explanation: 'The CPU (Central Processing Unit) does all the calculations — it\'s the brain!'
+      },
+      {
+        q: 'Which of these is an INPUT device?',
+        options: ['Monitor', 'Speaker', 'Printer', 'Keyboard'],
+        answer: 3,
+        explanation: 'A keyboard sends data INTO the computer — that\'s an input device.'
+      }
+    ]
+  }
+};
+
+// Default lesson for other topics
+function getDefaultLesson(subject, chapter) {
+  return {
+    title: chapter.title,
+    readTime: '6 min read',
+    chunks: [
+      {
+        type: 'intro',
+        heading: `📖 Introduction to ${chapter.title}`,
+        text: `Welcome to this lesson! In this chapter, you'll learn about <span class="key-word" data-def="The main topic of this lesson">${chapter.title}</span>. This is part of your ${subject.title} journey.`,
+        visual: { icon: subject.icon, caption: `${subject.title} — ${chapter.title}` }
+      },
+      {
+        type: 'key',
+        heading: '🔑 Key Concepts',
+        text: `This lesson covers the essential ideas you need to understand about ${chapter.title}. Pay attention to the highlighted words — click them to see their definitions!`,
+        note: `💡 Pro tip: Try the flashcards after reading to test your memory!`
+      },
+      {
+        type: 'text',
+        heading: '📌 What You Will Learn',
+        text: `By the end of this lesson, you will understand the core ideas, be able to answer quiz questions, and feel confident about this topic. Take your time — there's no rush!`
+      }
+    ],
+    flashcards: [
+      { front: `What subject does ${chapter.title} belong to?`, back: subject.title },
+      { front: 'How does adaptive learning help you?', back: 'It changes how content is shown based on what feels comfortable for you.' },
+      { front: 'What should you do if you find text hard?', back: 'Use the Settings to switch to Dyslexia Mode, increase font size, or enable Text-to-Speech.' }
+    ],
+    quiz: [
+      {
+        q: `Which subject does "${chapter.title}" belong to?`,
+        options: [subject.title, 'Art', 'Music', 'Sports'],
+        answer: 0,
+        explanation: `Correct! This is part of ${subject.title}.`
+      }
+    ]
+  };
+}
+
+// ===== STATE =====
+let state = {
+  currentMode: 'default',
+  selectedComforts: [],
+  currentSubject: null,
+  currentChapter: null,
+  currentChapterIndex: 0,
+  xp: 0,
+  lessonsCompleted: 0,
+  quizzesCorrect: 0,
+  streak: 3,
+  ttsEnabled: false,
+  wordDefEnabled: true,
+  voiceGuideEnabled: false,
+  chunkMode: true,
+  pomoDuration: 25,
+  focusMode: false,
+  flashcardIndex: 0,
+  flashcardFlipped: false,
+  utterance: null,
+  isSpeaking: false,
+  pomoInterval: null,
+  pomoPaused: false,
+  pomoSecondsLeft: 25 * 60,
+  pomoSessions: 0,
+  chunkIndex: 0
+};
+
+// Load saved state
+try {
+  const saved = JSON.parse(localStorage.getItem('neurolearn_state') || '{}');
+  Object.assign(state, saved);
+} catch(e) {}
+
+function saveState() {
+  const toSave = {
+    currentMode: state.currentMode,
+    xp: state.xp,
+    lessonsCompleted: state.lessonsCompleted,
+    quizzesCorrect: state.quizzesCorrect,
+    streak: state.streak,
+    ttsEnabled: state.ttsEnabled,
+    wordDefEnabled: state.wordDefEnabled,
+    voiceGuideEnabled: state.voiceGuideEnabled,
+    chunkMode: state.chunkMode,
+    pomoDuration: state.pomoDuration
+  };
+  localStorage.setItem('neurolearn_state', JSON.stringify(toSave));
+}
+
+// ===== PAGE MANAGEMENT =====
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+
+  if (name === 'subjects') renderSubjects();
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'settings') syncSettings();
+
+  // TTS bar visibility
+  document.getElementById('ttsBar').style.display =
+    (name === 'lesson' && state.ttsEnabled) ? 'flex' : 'none';
+}
+
+function setActive(btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ===== COMFORT SELECTOR =====
+function selectComfort(card) {
+  const mode = card.dataset.mode;
+  // Single select — deselect others first
+  document.querySelectorAll('.comfort-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  state.selectedComforts = [mode];
+}
+
+function applyComfort() {
+  const mode = state.selectedComforts[0] || 'default';
+  applyMode(mode);
+  showPage('subjects');
+  setActive(document.querySelectorAll('.nav-btn')[1]);
+  showReward('🎉', 'Mode Applied!', `${mode.charAt(0).toUpperCase() + mode.slice(1)} mode is now active`);
+}
+
+function applyMode(mode) {
+  const body = document.body;
+  // Remove existing modes
+  body.className = body.className.replace(/mode-\S+/g, '').trim();
+  if (mode !== 'default') body.classList.add('mode-' + mode);
+  state.currentMode = mode;
+
+  const modeSelect = document.getElementById('modeSelect');
+  if (modeSelect) modeSelect.value = mode;
+
+  if (state.voiceGuideEnabled) {
+    const msgs = {
+      adhd: 'ADHD mode enabled. Content is now more focused with less visual noise.',
+      dyslexia: 'Dyslexia mode enabled. Text spacing and fonts are now easier to read.',
+      autism: 'Calm mode enabled. The layout is now more predictable and soothing.',
+      visual: 'Visual learner mode enabled. More images and diagrams will be shown.',
+      calm: 'Calm mode enabled. Everything is slower and simpler.',
+      highcontrast: 'High contrast mode enabled for better visibility.'
+    };
+    if (msgs[mode]) voiceGuide(msgs[mode]);
+  }
+  saveState();
+}
+
+function applyFontSize(size) {
+  document.body.classList.remove('font-large', 'font-xlarge');
+  if (size) document.body.classList.add(size);
+}
+
+// ===== SUBJECTS =====
+function renderSubjects() {
+  const grid = document.getElementById('subjectsGrid');
+  grid.innerHTML = SUBJECTS.map(s => `
+    <div class="subject-card scroll-reveal" style="--card-color:${s.color}" onclick="openSubject('${s.id}')">
+      <div class="subject-icon">${s.icon}</div>
+      <div class="subject-title">${s.title}</div>
+      <div class="subject-desc">${s.desc}</div>
+      <div class="subject-chapters">📖 ${s.chapters.length} chapters</div>
+    </div>
+  `).join('');
+
+  // Scroll reveal
+  setTimeout(() => {
+    document.querySelectorAll('.scroll-reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), i * 80);
+    });
+  }, 50);
+}
+
+function openSubject(id) {
+  const subject = SUBJECTS.find(s => s.id === id);
+  if (!subject) return;
+  state.currentSubject = subject;
+  openChapter(subject, 0);
+}
+
+function openChapter(subject, chapterIndex) {
+  state.currentChapterIndex = chapterIndex;
+  const chapter = subject.chapters[chapterIndex];
+  state.currentChapter = chapter;
+
+  const lessonData = LESSON_CONTENT[chapter.id] || getDefaultLesson(subject, chapter);
+
+  showPage('lesson');
+  setActive(document.querySelectorAll('.nav-btn')[1]);
+
+  renderSidebar(subject, chapterIndex);
+  renderLesson(subject, chapter, lessonData);
+}
+
+// ===== SIDEBAR =====
+function renderSidebar(subject, activeIdx) {
+  const list = document.getElementById('chapterList');
+  list.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 8px 16px;">
+      <span style="font-size:20px;">${subject.icon}</span>
+      <strong style="font-size:14px;">${subject.title}</strong>
+    </div>
+  ` + subject.chapters.map((ch, i) => `
+    <div class="chapter-item ${i === activeIdx ? 'active' : ''} ${ch.done ? 'done' : ''}"
+         onclick="openChapter(state.currentSubject, ${i})">
+      <div class="check">${ch.done ? '✓' : (i + 1)}</div>
+      <span>${ch.title}</span>
+    </div>
+  `).join('');
+}
+
+// ===== LESSON RENDER =====
+function renderLesson(subject, chapter, lessonData) {
+  state.chunkIndex = 0;
+  const content = document.getElementById('lessonContent');
+
+  // Progress
+  const totalChapters = subject.chapters.length;
+  const doneChapters = subject.chapters.filter(c => c.done).length;
+  const pct = Math.round((doneChapters / totalChapters) * 100);
+
+  content.innerHTML = `
+    <!-- XP Strip -->
+    <div class="xp-strip">
+      <div class="xp-icon">⭐</div>
+      <div class="xp-info">
+        <div class="xp-label">Your XP</div>
+        <div class="xp-bar-outer"><div class="xp-bar-inner" id="xpBar" style="width:${Math.min(state.xp % 100, 100)}%"></div></div>
+      </div>
+      <div class="xp-count" id="xpCount">${state.xp} XP</div>
+    </div>
+
+    <!-- Header -->
+    <div class="lesson-header">
+      <div class="lesson-title-area">
+        <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:4px;" onclick="showPage('subjects');setActive(document.querySelectorAll('.nav-btn')[1])">
+          ← Back to ${subject.title}
+        </button>
+        <h2>${lessonData.title}</h2>
+        <div class="lesson-meta">
+          <span class="lesson-tag">⏱️ ${lessonData.readTime}</span>
+          <span class="lesson-tag" id="chunkInfo">Section 1 of ${lessonData.chunks.length}</span>
+        </div>
+      </div>
+      <div class="lesson-actions">
+        <button class="tool-btn" onclick="toggleTTSRead()">🔊 Listen</button>
+        <button class="tool-btn" onclick="showSection('flashcards')">🃏 Flashcards</button>
+        <button class="tool-btn" onclick="showSection('quiz')">✅ Quiz</button>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-bar-outer" style="flex:1">
+        <div class="progress-bar-inner" id="chunkProgress" style="width:${(1/lessonData.chunks.length)*100}%"></div>
+      </div>
+      <div class="progress-label" id="chunkProgressLabel">1 / ${lessonData.chunks.length}</div>
+    </div>
+
+    <!-- Content Sections -->
+    <div id="chunkArea"></div>
+
+    <!-- Nav buttons -->
+    <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;" id="chunkNavButtons">
+      <button class="tool-btn" id="chunkPrevBtn" onclick="prevChunk()" style="display:none">← Previous</button>
+      <button class="apply-btn" id="chunkNextBtn" onclick="nextChunk()" style="padding:12px 28px;font-size:15px;">Next Section →</button>
+    </div>
+
+    <!-- Flashcards Section -->
+    <div id="section-flashcards" style="display:none;margin-top:32px;">
+      <div class="section-title" style="margin-bottom:16px;">🃏 Flashcards</div>
+      <div class="flashcard-wrap">
+        <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+          <div class="fc-face fc-front">
+            <div class="fc-label">Question</div>
+            <div class="fc-text" id="fcFront"></div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-label">Answer</div>
+            <div class="fc-text" id="fcBack"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button onclick="fcNav(-1)">← Prev</button>
+        <span id="fcCounter" style="padding:8px 12px;font-size:13px;font-weight:600;color:var(--text-muted)"></span>
+        <button onclick="fcNav(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div id="section-quiz" style="display:none;margin-top:32px;">
+      <div class="section-title" style="margin-bottom:16px;">✅ Quiz Time!</div>
+      <div id="quizArea"></div>
+      <div id="quizComplete" style="display:none; text-align:center; padding:28px; background:var(--surface); border-radius:var(--radius); border:2px solid var(--border);">
+        <div style="font-size:48px; margin-bottom:12px;">🎉</div>
+        <div style="font-size:20px; font-weight:800; font-family:var(--font-display); margin-bottom:8px;">Quiz Complete!</div>
+        <div id="quizScore" style="color:var(--text-muted); margin-bottom:16px;"></div>
+        <button class="apply-btn" onclick="markChapterDone()">Mark Chapter Done ✅</button>
+      </div>
+    </div>
+
+    <!-- Chapter complete -->
+    <div id="chapterComplete" style="display:none;margin-top:24px;text-align:center;background:var(--surface);border:2px solid var(--accent3);border-radius:var(--radius);padding:32px;">
+      <div style="font-size:56px;margin-bottom:12px;">🏆</div>
+      <div style="font-size:22px;font-weight:800;font-family:var(--font-display);margin-bottom:8px;">Chapter Complete!</div>
+      <div style="color:var(--text-muted);margin-bottom:20px;">You earned <strong>+50 XP</strong> for finishing this chapter!</div>
+      ${state.currentChapterIndex < subject.chapters.length - 1 ? `
+        <button class="apply-btn" onclick="openChapter(state.currentSubject, ${state.currentChapterIndex + 1})">
+          Next Chapter →
+        </button>
+      ` : `
+        <button class="apply-btn" onclick="showPage('subjects');setActive(document.querySelectorAll('.nav-btn')[1])">
+          Choose Another Subject 🎓
+        </button>
+      `}
+    </div>
+  `;
+
+  // Store lesson data on state
+  state.lessonData = lessonData;
+  state.flashcardIndex = 0;
+  state.flashcardFlipped = false;
+
+  // Show first chunk
+  renderChunk(0);
+  setupWordDefs();
+}
+
+function renderChunk(index) {
+  const data = state.lessonData;
+  const chunk = data.chunks[index];
+  const area = document.getElementById('chunkArea');
+  if (!area || !chunk) return;
+
+  let html = `<div class="content-chunk ${chunk.type === 'key' ? 'highlight' : ''}">`;
+  html += `<h3>${chunk.heading}</h3>`;
+  html += `<p>${chunk.text}</p>`;
+
+  if (chunk.visual) {
+    html += `<div class="visual-card">
+      <span class="visual-icon">${chunk.visual.icon}</span>
+      <div class="visual-caption">${chunk.visual.caption}</div>
+    </div>`;
+  }
+
+  if (chunk.note) {
+    html += `<div class="inline-note">${chunk.note}</div>`;
+  }
+
+  // TTS voice chip
+  html += `<button class="voice-chip" onclick="voiceGuide(\`${chunk.text.replace(/<[^>]+>/g, '').replace(/`/g, "'")}\`)">🔊 Read this section</button>`;
+
+  html += `</div>`;
+
+  if (state.chunkMode) {
+    area.innerHTML = html;
+  } else {
+    // Show all at once
+    if (index === 0) area.innerHTML = '';
+    area.innerHTML += html;
+  }
+
+  // Update progress
+  const pct = ((index + 1) / data.chunks.length) * 100;
+  const pb = document.getElementById('chunkProgress');
+  if (pb) pb.style.width = pct + '%';
+  const pl = document.getElementById('chunkProgressLabel');
+  if (pl) pl.textContent = `${index + 1} / ${data.chunks.length}`;
+  const ci = document.getElementById('chunkInfo');
+  if (ci) ci.textContent = `Section ${index + 1} of ${data.chunks.length}`;
+
+  // Nav buttons
+  const prev = document.getElementById('chunkPrevBtn');
+  const next = document.getElementById('chunkNextBtn');
+  if (prev) prev.style.display = index > 0 ? 'flex' : 'none';
+  if (next) {
+    next.textContent = index < data.chunks.length - 1 ? 'Next Section →' : 'Go to Flashcards 🃏';
+  }
+
+  setupWordDefs();
+  addXP(5);
+}
+
+function nextChunk() {
+  const data = state.lessonData;
+  if (state.chunkIndex < data.chunks.length - 1) {
+    state.chunkIndex++;
+    renderChunk(state.chunkIndex);
+  } else {
+    // Go to flashcards
+    showSection('flashcards');
+    loadFlashcards();
+  }
+}
+
+function prevChunk() {
+  if (state.chunkIndex > 0) {
+    state.chunkIndex--;
+    renderChunk(state.chunkIndex);
+  }
+}
+
+function showSection(section) {
+  document.getElementById('section-flashcards').style.display = section === 'flashcards' ? 'block' : 'none';
+  document.getElementById('section-quiz').style.display = section === 'quiz' ? 'block' : 'none';
+
+  if (section === 'flashcards') loadFlashcards();
+  if (section === 'quiz') loadQuiz();
+}
+
+// ===== FLASHCARDS =====
+function loadFlashcards() {
+  const cards = state.lessonData.flashcards;
+  state.flashcardIndex = 0;
+  renderFlashcard();
+}
+
+function renderFlashcard() {
+  const cards = state.lessonData.flashcards;
+  const idx = state.flashcardIndex;
+  const el = document.getElementById('flashcard');
+  if (!el) return;
+  el.classList.remove('flipped');
+  document.getElementById('fcFront').textContent = cards[idx].front;
+  document.getElementById('fcBack').textContent = cards[idx].back;
+  document.getElementById('fcCounter').textContent = `${idx + 1} / ${cards.length}`;
+  state.flashcardFlipped = false;
+}
+
+function flipFlashcard() {
+  const el = document.getElementById('flashcard');
+  if (!el) return;
+  el.classList.toggle('flipped');
+  state.flashcardFlipped = !state.flashcardFlipped;
+  if (state.flashcardFlipped) addXP(2);
+}
+
+function fcNav(dir) {
+  const cards = state.lessonData.flashcards;
+  state.flashcardIndex = Math.max(0, Math.min(cards.length - 1, state.flashcardIndex + dir));
+  renderFlashcard();
+}
+
+// ===== QUIZ =====
+let quizAnswers = {};
+let quizTotal = 0;
+
+function loadQuiz() {
+  const quizzes = state.lessonData.quiz;
+  quizAnswers = {};
+  quizTotal = quizzes.length;
+  const area = document.getElementById('quizArea');
+  const complete = document.getElementById('quizComplete');
+  if (complete) complete.style.display = 'none';
+
+  area.innerHTML = quizzes.map((q, qi) => `
+    <div class="quiz-card" id="quiz-card-${qi}">
+      <h3>Q${qi + 1}. ${q.q}</h3>
+      <div class="quiz-options">
+        ${q.options.map((opt, oi) => `
+          <button class="quiz-option" onclick="answerQuiz(${qi}, ${oi})" id="qopt-${qi}-${oi}">
+            ${String.fromCharCode(65 + oi)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfb-${qi}"></div>
+    </div>
+  `).join('');
+}
+
+function answerQuiz(qi, oi) {
+  if (quizAnswers[qi] !== undefined) return; // Already answered
+
+  const quizzes = state.lessonData.quiz;
+  const correct = quizzes[qi].answer;
+  quizAnswers[qi] = oi;
+
+  const btn = document.getElementById(`qopt-${qi}-${oi}`);
+  const correctBtn = document.getElementById(`qopt-${qi}-${correct}`);
+  const fb = document.getElementById(`qfb-${qi}`);
+
+  // Disable all options
+  document.querySelectorAll(`#quiz-card-${qi} .quiz-option`).forEach(b => b.disabled = true);
+
+  if (oi === correct) {
+    btn.classList.add('correct');
+    fb.className = 'quiz-feedback show correct-fb';
+    fb.innerHTML = `✅ ${quizzes[qi].explanation}`;
+    addXP(20);
+    state.quizzesCorrect++;
+    saveState();
+  } else {
+    btn.classList.add('wrong');
+    correctBtn.classList.add('correct');
+    fb.className = 'quiz-feedback show wrong-fb';
+    fb.innerHTML = `❌ Not quite! ${quizzes[qi].explanation}`;
+  }
+
+  // Check if all answered
+  if (Object.keys(quizAnswers).length === quizTotal) {
+    setTimeout(() => {
+      const correct_count = Object.entries(quizAnswers).filter(([qi, oi]) =>
+        quizzes[parseInt(qi)].answer === oi
+      ).length;
+      const score = document.getElementById('quizScore');
+      if (score) score.textContent = `You got ${correct_count} out of ${quizTotal} correct!`;
+      const comp = document.getElementById('quizComplete');
+      if (comp) comp.style.display = 'block';
+      confetti();
+    }, 800);
+  }
+}
+
+function markChapterDone() {
+  const ch = state.currentSubject.chapters[state.currentChapterIndex];
+  ch.done = true;
+  state.lessonsCompleted++;
+  addXP(50);
+  saveState();
+
+  renderSidebar(state.currentSubject, state.currentChapterIndex);
+
+  const complete = document.getElementById('chapterComplete');
+  if (complete) {
+    complete.style.display = 'block';
+    complete.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  showReward('🏆', 'Chapter Complete!', `+50 XP earned! Keep it up!`);
+  confetti();
+}
+
+// ===== WORD DEFINITIONS =====
+const DEFS = {};
+
+function setupWordDefs() {
+  document.querySelectorAll('.key-word').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (!state.wordDefEnabled) return;
+      const def = el.dataset.def;
+      if (!def) return;
+      const tooltip = document.getElementById('wordTooltip');
+      tooltip.textContent = def;
+      tooltip.style.left = (e.clientX + 12) + 'px';
+      tooltip.style.top = (e.clientY - 40) + 'px';
+      tooltip.classList.add('show');
+      setTimeout(() => tooltip.classList.remove('show'), 3000);
+    });
+  });
+}
+
+// ===== TEXT TO SPEECH =====
+function voiceGuide(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.9;
+  utt.pitch = 1;
+  window.speechSynthesis.speak(utt);
+}
+
+function toggleTTS(toggle) {
+  toggle.classList.toggle('on');
+  state.ttsEnabled = toggle.classList.contains('on');
+  document.getElementById('ttsBar').style.display =
+    (state.ttsEnabled && document.getElementById('page-lesson').classList.contains('active')) ? 'flex' : 'none';
+  saveState();
+}
+
+function toggleTTSRead() {
+  if (state.isSpeaking) {
+    ttsStop();
+  } else {
+    ttsReadPage();
+  }
+}
+
+function ttsReadPage() {
+  if (!window.speechSynthesis) return alert('Text-to-speech not supported in this browser.');
+  window.speechSynthesis.cancel();
+
+  const textEl = document.querySelector('#chunkArea p');
+  if (!textEl) return;
+
+  const text = textEl.innerText;
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate = 0.85;
+  utt.pitch = 1;
+
+  state.isSpeaking = true;
+  document.getElementById('ttsStatus').textContent = 'Reading...';
+  document.getElementById('ttsPauseBtn').textContent = '⏸ Pause';
+
+  utt.onend = () => {
+    state.isSpeaking = false;
+    document.getElementById('ttsStatus').textContent = 'Done';
+  };
+
+  window.speechSynthesis.speak(utt);
+}
+
+function ttsPause() {
+  if (window.speechSynthesis.paused) {
+    window.speechSynthesis.resume();
+    document.getElementById('ttsPauseBtn').textContent = '⏸ Pause';
+  } else {
+    window.speechSynthesis.pause();
+    document.getElementById('ttsPauseBtn').textContent = '▶ Resume';
+  }
+}
+
+function ttsStop() {
+  window.speechSynthesis.cancel();
+  state.isSpeaking = false;
+  document.getElementById('ttsStatus').textContent = '';
+}
+
+// ===== POMODORO TIMER =====
+function setPomoDuration(mins) {
+  state.pomoDuration = parseInt(mins);
+  pomoReset();
+}
+
+function pomoToggle() {
+  if (state.pomoInterval) {
+    // Pause
+    clearInterval(state.pomoInterval);
+    state.pomoInterval = null;
+    document.getElementById('pomoBtnStart').textContent = '▶ Resume';
+  } else {
+    document.getElementById('pomoBtnStart').textContent = '⏸ Pause';
+    state.pomoInterval = setInterval(() => {
+      state.pomoSecondsLeft--;
+
+      if (state.pomoSecondsLeft <= 0) {
+        clearInterval(state.pomoInterval);
+        state.pomoInterval = null;
+        state.pomoSessions++;
+        document.getElementById('pomoBtnStart').textContent = '▶ Start';
+
+        const isLongBreak = state.pomoSessions % 3 === 0;
+        showReward('⏰', 'Session Complete!', isLongBreak ? 'Take a 15 min break! You earned it!' : 'Take a 5 min break!');
+        if (state.voiceGuideEnabled) voiceGuide(isLongBreak ? 'Great work! Take a longer break now.' : 'Session done! Time for a short break.');
+        pomoReset(true);
+        renderPomoDots();
+        return;
+      }
+
+      const mins = Math.floor(state.pomoSecondsLeft / 60);
+      const secs = state.pomoSecondsLeft % 60;
+      document.getElementById('pomodoroTime').textContent =
+        `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+
+      // Ring
+      const total = state.pomoDuration * 60;
+      const prog = (total - state.pomoSecondsLeft) / total;
+      const circumference = 2 * Math.PI * 57;
+      const offset = circumference - (prog * circumference);
+      const ring = document.getElementById('ringProgress');
+      if (ring) ring.style.strokeDashoffset = offset;
+
+    }, 1000);
+  }
+}
+
+function pomoReset(keepSessions) {
+  clearInterval(state.pomoInterval);
+  state.pomoInterval = null;
+  state.pomoSecondsLeft = state.pomoDuration * 60;
+  if (!keepSessions) state.pomoSessions = 0;
+  document.getElementById('pomoBtnStart').textContent = '▶ Start';
+  const mins = state.pomoDuration;
+  document.getElementById('pomodoroTime').textContent = `${mins}:00`;
+  const ring = document.getElementById('ringProgress');
+  if (ring) ring.style.strokeDashoffset = 358;
+  document.getElementById('pomodoroLabel').textContent = 'Focus Session';
+  renderPomoDots();
+}
+
+function renderPomoDots() {
+  const dots = document.getElementById('pomoSessions');
+  if (!dots) return;
+  dots.innerHTML = [0,1,2].map(i => `
+    <div class="pomo-dot ${i < state.pomoSessions % 3 ? 'done' : ''}"></div>
+  `).join('');
+}
+
+// ===== DASHBOARD =====
+function renderDashboard() {
+  document.getElementById('stat-lessons').textContent = state.lessonsCompleted;
+  document.getElementById('stat-xp').textContent = state.xp;
+  document.getElementById('stat-quizzes').textContent = state.quizzesCorrect;
+  document.getElementById('stat-streak').textContent = state.streak;
+
+  // Subject progress
+  const sp = document.getElementById('subjectProgress');
+  sp.innerHTML = SUBJECTS.map(s => {
+    const done = s.chapters.filter(c => c.done).length;
+    const pct = Math.round((done / s.chapters.length) * 100);
+    return `
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:600;margin-bottom:6px;">
+          <span>${s.icon} ${s.title}</span>
+          <span style="color:var(--text-muted)">${done}/${s.chapters.length}</span>
+        </div>
+        <div style="height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;">
+          <div style="width:${pct}%;height:100%;background:${s.color};border-radius:4px;transition:width 0.5s;"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Init pomo
+  pomoReset(true);
+  renderPomoDots();
+
+  // Mermaid
+  setTimeout(() => {
+    if (window.mermaid) {
+      mermaid.init(undefined, '.mermaid');
+    }
+  }, 200);
+}
+
+// ===== SETTINGS SYNC =====
+function syncSettings() {
+  const ts = document.getElementById('ttsToggle');
+  const at = document.getElementById('animToggle');
+  const wt = document.getElementById('wordDefToggle');
+  const vt = document.getElementById('voiceGuideToggle');
+  const ct = document.getElementById('chunkToggle');
+  const ms = document.getElementById('modeSelect');
+  const pd = document.getElementById('pomoDurationSelect');
+
+  if (ts) ts.classList.toggle('on', state.ttsEnabled);
+  if (at) at.classList.toggle('on', document.body.classList.contains('no-animation'));
+  if (wt) wt.classList.toggle('on', state.wordDefEnabled);
+  if (vt) vt.classList.toggle('on', state.voiceGuideEnabled);
+  if (ct) ct.classList.toggle('on', state.chunkMode);
+  if (ms) ms.value = state.currentMode;
+  if (pd) pd.value = state.pomoDuration;
+}
+
+function toggleDyslexiaFont(toggle) {
+  toggle.classList.toggle('on');
+  document.body.classList.toggle('use-opendyslexic', toggle.classList.contains('on'));
+}
+
+function toggleAnimation(toggle) {
+  toggle.classList.toggle('on');
+  document.body.classList.toggle('no-animation', toggle.classList.contains('on'));
+}
+
+function toggleWordDef(toggle) {
+  toggle.classList.toggle('on');
+  state.wordDefEnabled = toggle.classList.contains('on');
+}
+
+function toggleVoiceGuide(toggle) {
+  toggle.classList.toggle('on');
+  state.voiceGuideEnabled = toggle.classList.contains('on');
+}
+
+function toggleChunk(toggle) {
+  toggle.classList.toggle('on');
+  state.chunkMode = toggle.classList.contains('on');
+}
+
+function saveSettings() {
+  saveState();
+  showReward('💾', 'Settings Saved!', 'Your preferences have been updated');
+}
+
+// ===== XP SYSTEM =====
+function addXP(amount) {
+  state.xp += amount;
+  const xpBar = document.getElementById('xpBar');
+  const xpCount = document.getElementById('xpCount');
+  if (xpBar) xpBar.style.width = (state.xp % 100) + '%';
+  if (xpCount) xpCount.textContent = state.xp + ' XP';
+  saveState();
+}
+
+// ===== FOCUS MODE =====
+function toggleFocusMode() {
+  state.focusMode = !state.focusMode;
+  document.body.classList.toggle('focus-mode', state.focusMode);
+  document.getElementById('focusLabel').textContent = state.focusMode ? 'Exit Focus' : 'Focus Mode';
+  document.getElementById('focusIcon').textContent = state.focusMode ? '✕' : '🎯';
+}
+
+// ===== REWARD SYSTEM =====
+function showReward(icon, title, sub) {
+  const banner = document.getElementById('rewardBanner');
+  document.getElementById('rewardIcon').textContent = icon;
+  document.getElementById('rewardTitle').textContent = title;
+  document.getElementById('rewardSub').textContent = sub;
+  banner.classList.add('show');
+  setTimeout(() => banner.classList.remove('show'), 3500);
+}
+
+// ===== CONFETTI =====
+function confetti() {
+  const colors = ['#5B7FDB','#E8734A','#48B89F','#C96FBD','#F5A623','#FFD700'];
+  for (let i = 0; i < 40; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    el.style.animationDelay = Math.random() * 0.5 + 's';
+    el.style.width = el.style.height = (6 + Math.random() * 8) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+  }
+}
+
+// ===== CHATBOT =====
+function toggleChatbot() {
+  const win = document.getElementById('chatbotWindow');
+  win.classList.toggle('open');
+}
+
+const BOT_RESPONSES = {
+  'photosynthesis': 'Photosynthesis is how plants make food! 🌱 They use sunlight + water + CO₂ to make sugar and release oxygen. Think of it like a plant\'s kitchen!',
+  'fraction': 'A fraction shows part of a whole! 🍕 Like 1/2 means one part out of two equal parts. Imagine cutting a pizza in half!',
+  'noun': 'A noun is a naming word! 📖 It names people (teacher), places (school), things (book), or ideas (happiness). Every sentence has a noun!',
+  'verb': 'A verb is an action or doing word! ⚡ Like run, jump, think, is, have. It shows what the noun does!',
+  'cpu': 'CPU stands for Central Processing Unit — it\'s the brain of the computer! 🧠 It does all the calculations and thinking for every program.',
+  'adhd': 'For ADHD, I recommend: shorter reading sessions, using Focus Mode, and the Pomodoro timer. Take regular breaks — it really helps! 🎯',
+  'dyslexia': 'For Dyslexia: enable the Lexend font in Settings, use Text-to-Speech to listen instead of read, and try the dyslexia mode for better spacing. 📖',
+  'help': 'I can help you! Try asking me to explain any topic, simplify text, or give tips for a specific learning style. What do you need? 😊',
+  'default': 'Great question! 🌟 I\'m here to help make learning easier. Try asking about a specific topic like "What is gravity?" or "Explain nouns". If you want, I can also simplify any lesson text!'
+};
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const messages = document.getElementById('chatMessages');
+
+  // User message
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg user';
+  userMsg.textContent = msg;
+  messages.appendChild(userMsg);
+
+  // Thinking
+  const thinkMsg = document.createElement('div');
+  thinkMsg.className = 'msg bot thinking';
+  thinkMsg.textContent = '🤔 Thinking...';
+  messages.appendChild(thinkMsg);
+
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+
+  // Find response
+  await new Promise(r => setTimeout(r, 700));
+  thinkMsg.remove();
+
+  let response = BOT_RESPONSES.default;
+  const lower = msg.toLowerCase();
+  for (const [key, val] of Object.entries(BOT_RESPONSES)) {
+    if (lower.includes(key)) { response = val; break; }
+  }
+
+  // Simpler version check
+  if (lower.includes('simpl') || lower.includes('easy') || lower.includes('eli5')) {
+    response = '🧒 Simple explanation: ' + response;
+  }
+
+  const botMsg = document.createElement('div');
+  botMsg.className = 'msg bot';
+  botMsg.textContent = response;
+  messages.appendChild(botMsg);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+// ===== INIT =====
+function init() {
+  // Apply saved mode
+  applyMode(state.currentMode);
+
+  // Render subjects
+  renderSubjects();
+
+  // Mermaid init
+  if (window.mermaid) {
+    mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
+  }
+
+  // Streak display
+  document.getElementById('streakNum').textContent = state.streak;
+
+  // Update dashboard stats
+  document.getElementById('stat-lessons').textContent = state.lessonsCompleted;
+  document.getElementById('stat-xp').textContent = state.xp;
+  document.getElementById('stat-quizzes').textContent = state.quizzesCorrect;
+}
+
+init();
+</script>
+
+</body>
+</html>
