@@ -1,0 +1,3414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroLearn — Adaptive Learning for Everyone</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<style>
+/* =============================================
+   ROOT — Default Mode: Warm Cream & Indigo
+============================================= */
+:root {
+  --bg: #FAF7F2;
+  --bg2: #F0EBE1;
+  --surface: #FFFFFF;
+  --surface2: #EDE8E0;
+  --border: #D8D0C4;
+  --text: #1C1814;
+  --text-muted: #6B6057;
+  --accent: #4A5CE8;
+  --accent-light: #EEF0FD;
+  --accent2: #E8603A;
+  --accent3: #2DB89E;
+  --accent4: #C062B8;
+  --success: #3AAF6B;
+  --warning: #F0A020;
+  --danger: #E04040;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.13);
+  --font-size: 16px;
+  --line-height: 1.7;
+  --letter-spacing: 0.01em;
+  --word-spacing: 0;
+  --font-body: 'Baloo 2', cursive;
+  --font-reading: 'Atkinson Hyperlegible', sans-serif;
+  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  --nav-h: 66px;
+  /* Mode indicator strip color */
+  --mode-color: #4A5CE8;
+}
+
+/* =============================================
+   MODE: ADHD — Clean blue, ultra-minimal
+============================================= */
+body.mode-adhd {
+  --bg: #F0F6FF;
+  --bg2: #E3EEFF;
+  --surface: #FFFFFF;
+  --surface2: #DBE8FF;
+  --border: #99B8FF;
+  --text: #0D1B3E;
+  --text-muted: #4A6096;
+  --accent: #2550D9;
+  --accent-light: #EAF0FF;
+  --accent2: #FF6B35;
+  --accent3: #22BB8A;
+  --mode-color: #2550D9;
+  --font-size: 16px;
+  --line-height: 1.6;
+}
+body.mode-adhd .content-chunk { border-left: 5px solid var(--accent); }
+body.mode-adhd .content-chunk p { max-width: 600px; }
+body.mode-adhd nav { border-bottom: 3px solid var(--accent); }
+body.mode-adhd .mode-strip { background: linear-gradient(90deg, #2550D9, #7B9EFF); }
+body.mode-adhd .hero { background: linear-gradient(135deg, #E3EEFF 0%, #F0F6FF 100%); }
+body.mode-adhd .subject-card:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,80,217,0.18); }
+
+/* =============================================
+   MODE: DYSLEXIA — Warm yellow, Atkinson font
+============================================= */
+body.mode-dyslexia {
+  --bg: #FDFAE8;
+  --bg2: #F7F0CA;
+  --surface: #FFFEF5;
+  --surface2: #F2EAC0;
+  --border: #D4C46A;
+  --text: #2A2000;
+  --text-muted: #5A4A00;
+  --accent: #005A9C;
+  --accent-light: #E0F0FF;
+  --accent2: #CC6600;
+  --accent3: #007A50;
+  --mode-color: #005A9C;
+  --font-size: 18px;
+  --line-height: 2.0;
+  --letter-spacing: 0.04em;
+  --word-spacing: 0.1em;
+  font-family: 'Atkinson Hyperlegible', sans-serif !important;
+}
+body.mode-dyslexia * { font-family: 'Atkinson Hyperlegible', sans-serif !important; }
+body.mode-dyslexia p, body.mode-dyslexia .content-chunk p { text-align: left !important; max-width: 65ch; }
+body.mode-dyslexia .mode-strip { background: linear-gradient(90deg, #005A9C, #4A9ADA); }
+body.mode-dyslexia .hero { background: linear-gradient(135deg, #F7F0CA 0%, #FDFAE8 100%); }
+body.mode-dyslexia .content-chunk { padding: 28px 32px; }
+
+/* =============================================
+   MODE: AUTISM — Muted green, calm, consistent
+============================================= */
+body.mode-autism {
+  --bg: #EDF5EE;
+  --bg2: #DFF0E0;
+  --surface: #F8FCF8;
+  --surface2: #D3ECD5;
+  --border: #9DCBA0;
+  --text: #102010;
+  --text-muted: #3A6040;
+  --accent: #2E8B57;
+  --accent-light: #E0F5E0;
+  --accent2: #5A8B2E;
+  --accent3: #2E6B8B;
+  --mode-color: #2E8B57;
+  --font-size: 16px;
+  --line-height: 1.8;
+  --shadow: none;
+  --shadow-lg: 0 4px 16px rgba(46,139,87,0.12);
+}
+body.mode-autism * { box-shadow: none !important; }
+body.mode-autism .mode-strip { background: linear-gradient(90deg, #2E8B57, #5AB870); }
+body.mode-autism .hero { background: linear-gradient(135deg, #DFF0E0 0%, #EDF5EE 100%); }
+body.mode-autism nav { border-bottom: 3px solid #9DCBA0; }
+body.mode-autism .subject-card { border-radius: 8px; }
+body.mode-autism .comfort-card { border-radius: 8px; }
+
+/* =============================================
+   MODE: VISUAL — Deep purple, rich imagery
+============================================= */
+body.mode-visual {
+  --bg: #1A0A2E;
+  --bg2: #261040;
+  --surface: #2A1248;
+  --surface2: #341860;
+  --border: #6040A0;
+  --text: #F0E8FF;
+  --text-muted: #B0A0D0;
+  --accent: #C080FF;
+  --accent-light: #3A2060;
+  --accent2: #FF8060;
+  --accent3: #60FFD0;
+  --accent4: #FFCC40;
+  --mode-color: #C080FF;
+  --font-size: 16px;
+  --line-height: 1.75;
+}
+body.mode-visual .mode-strip { background: linear-gradient(90deg, #8040C0, #C080FF, #FF8060); }
+body.mode-visual .hero { background: linear-gradient(135deg, #261040 0%, #1A0A2E 100%); }
+body.mode-visual nav { background: #2A1248; border-bottom: 2px solid #6040A0; }
+body.mode-visual .visual-card { background: linear-gradient(135deg, #3A2060, #2A1248); border: 2px solid #C080FF; }
+body.mode-visual .visual-card .visual-icon { font-size: 80px; }
+
+/* =============================================
+   MODE: CALM — Soft sage, minimal
+============================================= */
+body.mode-calm {
+  --bg: #F2F5F0;
+  --bg2: #E8EDE5;
+  --surface: #FAFCF9;
+  --surface2: #E0E8DC;
+  --border: #B8CCAF;
+  --text: #1A2215;
+  --text-muted: #556050;
+  --accent: #6B9BB8;
+  --accent-light: #E8F3F8;
+  --accent2: #87CEAB;
+  --accent3: #B88A6B;
+  --mode-color: #6B9BB8;
+  --font-size: 16px;
+  --line-height: 1.85;
+}
+body.mode-calm .mode-strip { background: linear-gradient(90deg, #6B9BB8, #87CEAB); }
+body.mode-calm .hero { background: linear-gradient(135deg, #E8EDE5 0%, #F2F5F0 100%); }
+
+/* =============================================
+   MODE: HIGH CONTRAST — Pure black/white/gold
+============================================= */
+body.mode-highcontrast {
+  --bg: #000000;
+  --bg2: #0A0A0A;
+  --surface: #111111;
+  --surface2: #1C1C1C;
+  --border: #555555;
+  --text: #FFFFFF;
+  --text-muted: #BBBBBB;
+  --accent: #FFD700;
+  --accent-light: #1A1500;
+  --accent2: #00FF99;
+  --accent3: #00BFFF;
+  --accent4: #FF80C0;
+  --mode-color: #FFD700;
+}
+body.mode-highcontrast .mode-strip { background: linear-gradient(90deg, #FFD700, #FFA500); }
+body.mode-highcontrast .hero { background: #111111; }
+body.mode-highcontrast nav { background: #000000; border-bottom: 3px solid #FFD700; }
+body.mode-highcontrast .key-word { background: #FFD700; color: #000; border-bottom: 2px solid #FFA500; }
+
+/* Font Sizes */
+body.font-large { --font-size: 19px; --line-height: 1.85; }
+body.font-xlarge { --font-size: 23px; --line-height: 2.0; }
+body.no-animation * { animation: none !important; transition: none !important; }
+
+/* =============================================
+   RESET & BASE
+============================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+  letter-spacing: var(--letter-spacing);
+  word-spacing: var(--word-spacing);
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.4s, color 0.4s, font-size 0.3s;
+  min-height: 100vh;
+}
+
+/* =============================================
+   MODE STRIP (top indicator bar)
+============================================= */
+.mode-strip {
+  height: 5px;
+  background: linear-gradient(90deg, var(--accent), var(--accent3));
+  transition: background 0.4s;
+}
+
+/* =============================================
+   NAV
+============================================= */
+nav {
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-h);
+  position: sticky;
+  top: 5px;
+  z-index: 100;
+  box-shadow: var(--shadow);
+  transition: background 0.4s, border-color 0.4s;
+}
+
+.nav-logo {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 21px;
+  color: var(--accent);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.nav-logo .logo-emoji { font-size: 26px; }
+
+.nav-links { display: flex; gap: 2px; }
+
+.nav-btn {
+  background: none;
+  border: none;
+  padding: 8px 13px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--accent-light); color: var(--accent); }
+.nav-btn.active { background: var(--accent-light); color: var(--accent); font-weight: 700; }
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #FF6B35, #FF9A00);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.focus-mode-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.focus-mode-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+
+/* EXIT FOCUS button — always rendered, hidden normally */
+.exit-focus-btn {
+  display: none;
+  background: #E04040;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  gap: 5px;
+  align-items: center;
+  transition: all 0.2s;
+}
+.exit-focus-btn:hover { background: #C03030; }
+
+/* =============================================
+   FOCUS MODE
+============================================= */
+body.focus-mode nav .nav-links,
+body.focus-mode .streak-badge,
+body.focus-mode .focus-mode-btn { display: none !important; }
+body.focus-mode .exit-focus-btn { display: inline-flex !important; }
+body.focus-mode .lesson-sidebar { display: none !important; }
+body.focus-mode .lesson-layout { grid-template-columns: 1fr !important; }
+body.focus-mode .lesson-content { max-width: 740px; margin: 0 auto; }
+body.focus-mode .chatbot-wrap { display: none; }
+body.focus-mode .mode-strip { height: 8px; }
+
+/* =============================================
+   PAGES
+============================================= */
+.page { display: none; animation: pageIn 0.25s ease; }
+.page.active { display: block; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* =============================================
+   HERO
+============================================= */
+.hero {
+  background: var(--surface);
+  padding: 56px 24px 44px;
+  text-align: center;
+  border-bottom: 2px solid var(--border);
+  transition: background 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--accent) 8%, transparent) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 5vw, 50px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  position: relative;
+}
+.hero h1 em { color: var(--accent); font-style: normal; }
+
+.hero p {
+  max-width: 580px;
+  margin: 0 auto 28px;
+  color: var(--text-muted);
+  font-size: clamp(15px, 2.5vw, 18px);
+  position: relative;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.badge {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.badge:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+.cta-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 15px 36px;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--accent) 40%, transparent);
+  position: relative;
+}
+.cta-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 28px color-mix(in srgb, var(--accent) 50%, transparent); }
+
+/* =============================================
+   COMFORT SELECTOR
+============================================= */
+.comfort-section {
+  padding: 44px 24px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.section-subtitle { color: var(--text-muted); margin-bottom: 24px; font-size: 15px; }
+
+.comfort-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.comfort-card {
+  background: var(--surface);
+  border: 2.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 16px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+}
+.comfort-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.comfort-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.comfort-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.comfort-card .icon { font-size: 36px; margin-bottom: 10px; display: block; }
+.comfort-card .label { font-weight: 800; font-size: 14px; margin-bottom: 5px; }
+.comfort-card .desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+.comfort-card.selected .desc { color: var(--text); }
+
+/* Mode color dots */
+.comfort-card[data-mode="adhd"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #2550D9; border-radius: 4px 4px 0 0; }
+.comfort-card[data-mode="dyslexia"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #005A9C; border-radius: 4px 4px 0 0; }
+.comfort-card[data-mode="autism"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #2E8B57; border-radius: 4px 4px 0 0; }
+.comfort-card[data-mode="visual"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg,#8040C0,#FF8060); border-radius: 4px 4px 0 0; }
+.comfort-card[data-mode="calm"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #6B9BB8; border-radius: 4px 4px 0 0; }
+.comfort-card[data-mode="default"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #4A5CE8; border-radius: 4px 4px 0 0; }
+
+.apply-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 13px 32px;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.apply-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in srgb, var(--accent) 45%, transparent); }
+
+/* Voice chips */
+.voice-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 24px; }
+.voice-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.voice-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* =============================================
+   SUBJECTS GRID
+============================================= */
+.subjects-section { padding: 36px 24px; max-width: 1120px; margin: 0 auto; }
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+.subject-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 22px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.subject-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: var(--card-color, var(--accent));
+  transition: height 0.2s;
+}
+.subject-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--card-color, var(--accent)); }
+.subject-card:hover::before { height: 8px; }
+.subject-icon { font-size: 38px; }
+.subject-title { font-weight: 800; font-size: 18px; }
+.subject-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.subject-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--card-color, var(--accent));
+  background: color-mix(in srgb, var(--card-color, var(--accent)) 12%, transparent);
+  padding: 3px 10px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+/* Self-learning card special */
+.subject-card.sandbox-card {
+  border-style: dashed;
+  border-width: 2.5px;
+  background: var(--accent-light);
+}
+
+/* scroll reveal */
+.scroll-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.45s ease, transform 0.45s ease; }
+.scroll-reveal.visible { opacity: 1; transform: none; }
+
+/* =============================================
+   LESSON LAYOUT
+============================================= */
+.lesson-layout {
+  display: grid;
+  grid-template-columns: 264px 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: calc(100vh - var(--nav-h) - 5px);
+  transition: grid-template-columns 0.3s;
+}
+
+.lesson-sidebar {
+  background: var(--surface);
+  border-right: 2px solid var(--border);
+  padding: 22px 14px;
+  position: sticky;
+  top: calc(var(--nav-h) + 5px);
+  height: calc(100vh - var(--nav-h) - 5px);
+  overflow-y: auto;
+  transition: background 0.4s;
+}
+
+.lesson-sidebar h3 {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding: 0 8px;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.18s;
+  margin-bottom: 3px;
+}
+.chapter-item:hover { background: var(--surface2); color: var(--text); }
+.chapter-item.active { background: var(--accent-light); color: var(--accent); }
+.chapter-item.done { color: var(--success); }
+
+.check-circle {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.chapter-item.done .check-circle { background: var(--success); border-color: var(--success); color: white; }
+.chapter-item.active .check-circle { border-color: var(--accent); }
+
+/* =============================================
+   LESSON CONTENT
+============================================= */
+.lesson-content { padding: 28px 32px; transition: all 0.3s; }
+
+.lesson-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.lesson-title-area h2 {
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.lesson-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+.lesson-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.lesson-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.tool-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.tool-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.tool-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* =============================================
+   XP STRIP
+============================================= */
+.xp-strip {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.xp-icon { font-size: 22px; }
+.xp-info { flex: 1; }
+.xp-lbl { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.xp-bar-outer { height: 9px; background: var(--surface2); border-radius: 5px; overflow: hidden; margin-top: 4px; }
+.xp-bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 5px; transition: width 0.5s ease; }
+.xp-num { font-weight: 800; font-size: 18px; color: var(--accent4); }
+
+/* =============================================
+   PROGRESS BAR
+============================================= */
+.progress-wrap {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.progress-bar-outer { flex: 1; height: 13px; background: var(--surface2); border-radius: 7px; overflow: hidden; }
+.progress-bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); border-radius: 7px; transition: width 0.5s ease; }
+.progress-label { font-size: 13px; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+
+/* =============================================
+   CONTENT CHUNKS
+============================================= */
+.content-chunk {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 18px;
+  animation: chunkIn 0.3s ease forwards;
+  transition: background 0.4s, border-color 0.4s;
+}
+@keyframes chunkIn { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+.content-chunk.highlight {
+  border-color: var(--accent2);
+  background: color-mix(in srgb, var(--accent2) 7%, var(--surface));
+  border-left: 5px solid var(--accent2);
+}
+
+.content-chunk h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--accent);
+}
+
+.content-chunk p { max-width: 700px; }
+
+/* key words */
+.key-word {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-bottom: 2.5px solid var(--accent);
+  padding: 1px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-weight: 600;
+}
+.key-word:hover { background: color-mix(in srgb, var(--accent) 26%, transparent); }
+
+/* visual card */
+.visual-card {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 22px;
+  text-align: center;
+  margin: 14px 0;
+  border: 2px dashed var(--border);
+  transition: background 0.4s;
+}
+.visual-card .visual-icon { font-size: 72px; line-height: 1; display: block; margin-bottom: 10px; }
+.visual-card .visual-caption { font-size: 13px; color: var(--text-muted); font-style: italic; }
+
+/* visual mode gets richer visual cards */
+body.mode-visual .visual-card {
+  padding: 32px;
+  border-radius: 16px;
+  border: 2px solid var(--accent);
+}
+body.mode-visual .visual-card .visual-icon { font-size: 100px; }
+
+/* inline note */
+.inline-note {
+  background: color-mix(in srgb, var(--accent3) 12%, var(--surface));
+  border-left: 4px solid var(--accent3);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin: 12px 0;
+  font-weight: 600;
+}
+
+/* read chip */
+.read-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 10px;
+}
+.read-chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* chunk nav */
+.chunk-nav { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+
+/* =============================================
+   FLASHCARDS  — FIX: colour on flip
+============================================= */
+.flashcard-wrap { perspective: 1200px; margin: 20px auto; max-width: 500px; }
+
+.flashcard {
+  width: 100%;
+  height: 230px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+
+.fc-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  text-align: center;
+  border: 2.5px solid var(--border);
+  transition: background 0.4s;
+}
+
+.fc-front { background: var(--surface); }
+
+/* ANSWER SIDE — vibrant colour on flip */
+.fc-back {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, var(--accent3)));
+  border-color: var(--accent);
+  transform: rotateY(180deg);
+}
+.fc-back .fc-lbl { color: rgba(255,255,255,0.75); }
+.fc-back .fc-text { color: #FFFFFF; }
+
+/* Mode-specific flashcard back colours */
+body.mode-adhd .fc-back { background: linear-gradient(135deg,#2550D9,#6A8FFF); }
+body.mode-dyslexia .fc-back { background: linear-gradient(135deg,#005A9C,#0085E0); }
+body.mode-autism .fc-back { background: linear-gradient(135deg,#2E8B57,#5AC87A); }
+body.mode-visual .fc-back { background: linear-gradient(135deg,#8040C0,#C080FF); }
+body.mode-calm .fc-back { background: linear-gradient(135deg,#6B9BB8,#87CEAB); }
+body.mode-highcontrast .fc-back { background: linear-gradient(135deg,#5A4A00,#8A7000); border-color: #FFD700; }
+body.mode-highcontrast .fc-back .fc-text { color: #FFD700; }
+
+.fc-lbl { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+.fc-text { font-size: 18px; font-weight: 700; line-height: 1.4; }
+.fc-hint { font-size: 12px; margin-top: 10px; opacity: 0.7; }
+
+.fc-nav { display: flex; justify-content: center; gap: 10px; margin-top: 14px; }
+.fc-nav button {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  padding: 8px 22px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+.fc-nav button:hover { border-color: var(--accent); color: var(--accent); }
+
+/* =============================================
+   QUIZ
+============================================= */
+.quiz-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 26px;
+  margin-bottom: 18px;
+  transition: background 0.4s;
+}
+.quiz-card h3 { font-weight: 800; font-size: 16px; margin-bottom: 16px; }
+
+.quiz-options { display: flex; flex-direction: column; gap: 9px; }
+.quiz-option {
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.2s;
+  text-align: left;
+  font-family: var(--font-body);
+}
+.quiz-option:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-light); }
+.quiz-option.correct { border-color: var(--success); background: color-mix(in srgb, var(--success) 12%, var(--surface)); color: #0A5A28; }
+.quiz-option.wrong { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 10%, var(--surface)); color: #6A1010; }
+.quiz-option:disabled { cursor: not-allowed; }
+
+.quiz-feedback {
+  margin-top: 12px;
+  padding: 11px 15px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 14px;
+  display: none;
+}
+.quiz-feedback.show { display: block; animation: chunkIn 0.2s ease; }
+.quiz-feedback.correct-fb { background: color-mix(in srgb, var(--success) 12%, var(--surface)); border: 1.5px solid var(--success); color: #0A5A28; }
+.quiz-feedback.wrong-fb { background: color-mix(in srgb, var(--danger) 10%, var(--surface)); border: 1.5px solid var(--danger); color: #6A1010; }
+
+/* =============================================
+   WORD TOOLTIP
+============================================= */
+.word-tooltip {
+  position: fixed;
+  background: var(--text);
+  color: var(--bg);
+  padding: 9px 15px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  max-width: 260px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  line-height: 1.5;
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+}
+.word-tooltip.show { opacity: 1; }
+
+/* =============================================
+   TTS BAR
+============================================= */
+.tts-bar {
+  background: var(--accent-light);
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.tts-bar button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 5px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+.tts-bar button.secondary { background: var(--surface2); color: var(--text); }
+.tts-bar button:hover { transform: translateY(-1px); }
+.tts-status { margin-left: auto; font-size: 12px; opacity: 0.7; }
+
+/* =============================================
+   POMODORO
+============================================= */
+.pomodoro-wrap {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px;
+  text-align: center;
+  max-width: 310px;
+  margin: 0 auto 20px;
+  transition: background 0.4s;
+}
+
+.pomodoro-ring {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 14px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pomodoro-ring svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: var(--surface2); stroke-width: 9; }
+.ring-progress { fill: none; stroke: var(--accent); stroke-width: 9; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+
+.pomo-time { font-size: 34px; font-weight: 800; position: relative; z-index: 1; }
+.pomo-label { font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; }
+
+.pomo-btns { display: flex; gap: 9px; justify-content: center; }
+.pomo-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 9px 22px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--font-body);
+}
+.pomo-btn.secondary { background: var(--surface2); color: var(--text); }
+.pomo-btn:hover { transform: translateY(-1px); }
+
+.pomo-dots { display: flex; gap: 6px; justify-content: center; margin-top: 14px; }
+.pomo-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); transition: all 0.3s; }
+.pomo-dot.done { background: var(--accent); border-color: var(--accent); }
+
+/* =============================================
+   REWARD BANNER
+============================================= */
+.reward-banner {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-24px);
+  background: var(--surface);
+  border: 2.5px solid var(--accent3);
+  border-radius: var(--radius);
+  padding: 18px 30px;
+  box-shadow: var(--shadow-lg);
+  z-index: 300;
+  text-align: center;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(.175,.885,.32,1.275);
+  pointer-events: none;
+  min-width: 260px;
+}
+.reward-banner.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.reward-icon { font-size: 38px; display: block; margin-bottom: 5px; }
+.reward-title { font-weight: 800; font-size: 16px; }
+.reward-sub { font-size: 13px; color: var(--text-muted); }
+
+/* =============================================
+   CHATBOT
+============================================= */
+.chatbot-wrap { position: fixed; bottom: 22px; right: 22px; z-index: 150; }
+
+.chatbot-toggle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.chatbot-toggle:hover { transform: scale(1.1); }
+
+.chatbot-window {
+  position: absolute;
+  bottom: 68px;
+  right: 0;
+  width: 330px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: chunkIn 0.2s ease;
+}
+.chatbot-window.open { display: flex; }
+
+.chatbot-header {
+  background: var(--accent);
+  color: white;
+  padding: 13px 15px;
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chatbot-close { background: none; border: none; color: white; font-size: 22px; cursor: pointer; line-height: 1; }
+
+.chatbot-messages {
+  flex: 1;
+  max-height: 310px;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.msg {
+  max-width: 82%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  animation: chunkIn 0.2s ease;
+}
+.msg.bot { background: var(--surface2); border-bottom-left-radius: 4px; align-self: flex-start; }
+.msg.user { background: var(--accent); color: white; border-bottom-right-radius: 4px; align-self: flex-end; }
+.msg.thinking { opacity: 0.6; font-style: italic; }
+
+.chatbot-input {
+  padding: 10px 12px;
+  border-top: 1.5px solid var(--border);
+  display: flex;
+  gap: 7px;
+}
+.chatbot-input input {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+}
+.chatbot-input input:focus { border-color: var(--accent); }
+.chatbot-input button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* =============================================
+   DASHBOARD
+============================================= */
+.dashboard-wrap { max-width: 1000px; margin: 0 auto; padding: 30px 24px; }
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+  gap: 15px;
+  margin-bottom: 26px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  transition: all 0.2s;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.stat-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.stat-value { font-size: 28px; font-weight: 800; }
+.stat-label { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+.dashboard-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+.mindmap-wrap { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); padding: 20px; overflow-x: auto; }
+
+/* =============================================
+   SETTINGS
+============================================= */
+.settings-wrap { max-width: 760px; margin: 0 auto; padding: 36px 24px; }
+
+.settings-group { background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 22px; }
+.settings-group-title {
+  padding: 13px 20px;
+  background: var(--surface2);
+  border-bottom: 1.5px solid var(--border);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.settings-row {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  gap: 14px;
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-row-label { font-weight: 700; font-size: 15px; }
+.settings-row-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.toggle { width: 44px; height: 24px; background: var(--border); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+.toggle.on { background: var(--accent); }
+.toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 3px; left: 3px; transition: left 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+.toggle.on::after { left: 23px; }
+
+.settings-select {
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 12px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.settings-select:focus { border-color: var(--accent); }
+
+/* =============================================
+   SELF LEARNING SANDBOX
+============================================= */
+.sandbox-area {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+.sandbox-area h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--accent); }
+.sandbox-area p.desc { color: var(--text-muted); font-size: 14px; margin-bottom: 14px; }
+
+.sandbox-textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 15px;
+  background: var(--bg);
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 12px;
+}
+.sandbox-textarea:focus { border-color: var(--accent); }
+
+.simplify-btn {
+  background: var(--accent2);
+  color: white;
+  border: none;
+  padding: 11px 26px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-body);
+}
+.simplify-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+.simplified-output {
+  display: none;
+  margin-top: 20px;
+}
+.simplified-output.show { display: block; }
+
+.simplified-block {
+  background: var(--accent-light);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  animation: chunkIn 0.3s ease;
+}
+.simplified-block .part-label { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.simplified-block .part-text { font-size: var(--font-size); line-height: var(--line-height); }
+
+/* =============================================
+   CONFETTI
+============================================= */
+.confetti-piece {
+  position: fixed;
+  pointer-events: none;
+  z-index: 999;
+  animation: confettiFall linear forwards;
+  border-radius: 2px;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(740deg); opacity: 0; }
+}
+
+/* =============================================
+   CHAPTER COMPLETE
+============================================= */
+.chapter-complete-card {
+  text-align: center;
+  background: var(--surface);
+  border: 2.5px solid var(--accent3);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  margin-top: 24px;
+}
+.chapter-complete-card .big-icon { font-size: 60px; margin-bottom: 12px; display: block; }
+.chapter-complete-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.chapter-complete-card p { color: var(--text-muted); margin-bottom: 20px; }
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media (max-width: 700px) {
+  .lesson-layout { grid-template-columns: 1fr !important; }
+  .lesson-sidebar { display: none; }
+  .nav-links { display: none; }
+  .dashboard-row { grid-template-columns: 1fr; }
+  .lesson-content { padding: 18px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="mode-strip" id="modeStrip"></div>
+
+<nav id="mainNav">
+  <div class="nav-logo" onclick="showPage('home'); setActive(document.querySelectorAll('.nav-btn')[0])">
+    <span class="logo-emoji">🧠</span> NeuroLearn
+  </div>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('home'); setActive(this)">Home</button>
+    <button class="nav-btn" onclick="showPage('subjects'); setActive(this)">Subjects</button>
+    <button class="nav-btn" onclick="showPage('dashboard'); setActive(this)">My Progress</button>
+    <button class="nav-btn" onclick="showPage('settings'); setActive(this)">⚙️ Settings</button>
+  </div>
+  <div class="nav-right">
+    <span class="streak-badge">🔥 <span id="streakNum">0</span> day streak</span>
+    <button class="focus-mode-btn" id="focusModeBtn" onclick="toggleFocusMode()">🎯 Focus Mode</button>
+    <button class="exit-focus-btn" id="exitFocusBtn" onclick="toggleFocusMode()">✕ Exit Focus</button>
+  </div>
+</nav>
+
+<!-- REWARD BANNER -->
+<div class="reward-banner" id="rewardBanner">
+  <span class="reward-icon" id="rewardIcon">🏆</span>
+  <div class="reward-title" id="rewardTitle">Achievement!</div>
+  <div class="reward-sub" id="rewardSub"></div>
+</div>
+
+<!-- WORD TOOLTIP -->
+<div class="word-tooltip" id="wordTooltip"></div>
+
+<!-- TTS BAR -->
+<div class="tts-bar" id="ttsBar" style="display:none; max-width:1200px; margin:6px auto; border-radius:var(--radius);">
+  🔊 Text-to-Speech
+  <button onclick="ttsReadPage()">▶ Read</button>
+  <button class="secondary" onclick="ttsPause()" id="ttsPauseBtn">⏸ Pause</button>
+  <button class="secondary" onclick="ttsStop()">⏹ Stop</button>
+  <span class="tts-status" id="ttsStatus"></span>
+</div>
+
+<!-- ==================== PAGES ==================== -->
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <h1>Learning, <em>Your Way</em></h1>
+    <p>An adaptive platform that reshapes itself around how <em>you</em> think — not the other way around.</p>
+    <div class="hero-badges">
+      <span class="badge">✅ No diagnosis needed</span>
+      <span class="badge">🎯 ADHD friendly</span>
+      <span class="badge">📖 Dyslexia friendly</span>
+      <span class="badge">🌿 Autism friendly</span>
+      <span class="badge">🖼️ Visual learners</span>
+      <span class="badge">🔊 Voice support</span>
+    </div>
+    <button class="cta-btn" onclick="showPage('subjects'); setActive(document.querySelectorAll('.nav-btn')[1])">
+      Start Learning →
+    </button>
+  </div>
+
+  <div class="comfort-section">
+    <div class="section-title">How do you feel right now?</div>
+    <div class="section-subtitle">Pick what fits. You can switch anytime — no labels, no pressure.</div>
+
+    <div class="comfort-grid">
+      <div class="comfort-card" data-mode="adhd" onclick="selectComfort(this)">
+        <span class="icon">⚡</span>
+        <div class="label">Text feels overwhelming</div>
+        <div class="desc">I lose focus or feel scattered easily</div>
+      </div>
+      <div class="comfort-card" data-mode="dyslexia" onclick="selectComfort(this)">
+        <span class="icon">📖</span>
+        <div class="label">Text is hard to read</div>
+        <div class="desc">Letters blur or words jump around</div>
+      </div>
+      <div class="comfort-card" data-mode="autism" onclick="selectComfort(this)">
+        <span class="icon">🌿</span>
+        <div class="label">Bright screens bother me</div>
+        <div class="desc">I prefer calm, predictable layouts</div>
+      </div>
+      <div class="comfort-card" data-mode="visual" onclick="selectComfort(this)">
+        <span class="icon">🖼️</span>
+        <div class="label">I prefer visuals & images</div>
+        <div class="desc">Diagrams help me understand better</div>
+      </div>
+      <div class="comfort-card" data-mode="calm" onclick="selectComfort(this)">
+        <span class="icon">🧘</span>
+        <div class="label">I want slow explanations</div>
+        <div class="desc">Step by step, at my own pace</div>
+      </div>
+      <div class="comfort-card" data-mode="default" onclick="selectComfort(this)">
+        <span class="icon">🙂</span>
+        <div class="label">Standard mode is fine</div>
+        <div class="desc">Default reading experience</div>
+      </div>
+    </div>
+
+    <div class="voice-row">
+      <button class="voice-chip" onclick="voiceGuide('This interface adapts to your needs. Select what feels comfortable.')">🔊 Hear instructions</button>
+      <button class="voice-chip" onclick="voiceGuide('Choose how content looks and sounds. You can change it anytime.')">🔊 What are these options?</button>
+    </div>
+
+    <button class="apply-btn" onclick="applyComfort()">Apply & Start Learning 🚀</button>
+  </div>
+</div>
+
+<!-- SUBJECTS -->
+<div class="page" id="page-subjects">
+  <div class="subjects-section">
+    <div class="section-title" style="margin-bottom:4px;">Choose a Subject</div>
+    <div class="section-subtitle">Elementary level • Curricular & non-curricular</div>
+    <div class="subjects-grid" id="subjectsGrid"></div>
+  </div>
+</div>
+
+<!-- LESSON -->
+<div class="page" id="page-lesson">
+  <div class="lesson-layout" id="lessonLayout">
+    <div class="lesson-sidebar" id="lessonSidebar">
+      <h3>Chapters</h3>
+      <div id="chapterList"></div>
+    </div>
+    <div class="lesson-content" id="lessonContent"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="dashboard-wrap">
+    <div class="section-title" style="margin-bottom:20px;">📊 My Learning Dashboard</div>
+    <div class="dashboard-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#E0EFFE;">📚</div>
+        <div><div class="stat-value" id="stat-lessons">0</div><div class="stat-label">Lessons Done</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#FDF3E0;">⭐</div>
+        <div><div class="stat-value" id="stat-xp">0</div><div class="stat-label">XP Earned</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#E0F5ED;">✅</div>
+        <div><div class="stat-value" id="stat-quizzes">0</div><div class="stat-label">Correct Answers</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#F5EEF8;">🔥</div>
+        <div><div class="stat-value" id="stat-streak">0</div><div class="stat-label">Day Streak</div></div>
+      </div>
+    </div>
+    <div class="dashboard-row">
+      <div>
+        <div class="section-title" style="font-size:17px;margin-bottom:14px;">Subject Progress</div>
+        <div id="subjectProgress"></div>
+      </div>
+      <div>
+        <div class="section-title" style="font-size:17px;margin-bottom:14px;">Focus Timer</div>
+        <div class="pomodoro-wrap">
+          <div class="pomodoro-ring">
+            <svg viewBox="0 0 140 140">
+              <circle class="ring-bg" cx="70" cy="70" r="57"/>
+              <circle class="ring-progress" id="ringProgress" cx="70" cy="70" r="57" stroke-dasharray="358" stroke-dashoffset="358"/>
+            </svg>
+            <div class="pomo-time" id="pomodoroTime">25:00</div>
+          </div>
+          <div class="pomo-label" id="pomodoroLabel">Focus Session</div>
+          <div class="pomo-btns">
+            <button class="pomo-btn" id="pomoBtnStart" onclick="pomoToggle()">▶ Start</button>
+            <button class="pomo-btn secondary" onclick="pomoReset(false)">↺ Reset</button>
+          </div>
+          <div class="pomo-dots" id="pomoDots"></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-title" style="font-size:17px;margin-bottom:14px;">Concept Mind Map</div>
+    <div class="mindmap-wrap">
+      <div class="mermaid" id="mindMapDiagram">
+mindmap
+  root((NeuroLearn))
+    Science
+      Plants & Food
+      Animals
+      Earth & Space
+    History
+      Ancient World
+      Middle Ages
+    English
+      Grammar
+      Reading & Writing
+    Computer Science
+      Hardware
+      Internet
+    Geography
+      Continents
+      Climate
+    General
+      Life Skills
+      Critical Thinking
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page" id="page-settings">
+  <div class="settings-wrap">
+    <div class="section-title" style="margin-bottom:4px;">⚙️ Accessibility Settings</div>
+    <div class="section-subtitle" style="margin-bottom:26px;">Personalise your experience anytime.</div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">🎨 Display Mode</div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Comfort Mode</div><div class="settings-row-desc">Changes colours, fonts & spacing</div></div>
+        <select class="settings-select" id="modeSelect" onchange="applyMode(this.value)">
+          <option value="default">Default (Warm Cream)</option>
+          <option value="adhd">ADHD — Clean Blue Focus</option>
+          <option value="dyslexia">Dyslexia — Warm Yellow + Atkinson</option>
+          <option value="autism">Autism — Calm Sage Green</option>
+          <option value="visual">Visual — Dark Purple</option>
+          <option value="calm">Calm — Soft Sage</option>
+          <option value="highcontrast">High Contrast — Black & Gold</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Font Size</div><div class="settings-row-desc">Bigger text for easier reading</div></div>
+        <select class="settings-select" id="fontSizeSelect" onchange="applyFontSize(this.value)">
+          <option value="">Normal</option>
+          <option value="font-large">Large</option>
+          <option value="font-xlarge">Extra Large</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Dyslexia-friendly Font</div><div class="settings-row-desc">Use Atkinson Hyperlegible</div></div>
+        <div class="toggle" id="dyslexiaFontToggle" onclick="toggleClass(this,'on'); document.body.classList.toggle('use-dysfont',this.classList.contains('on'))"></div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">♿ Accessibility Tools</div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Text-to-Speech</div><div class="settings-row-desc">Read lesson content aloud</div></div>
+        <div class="toggle" id="ttsToggle" onclick="toggleTTS(this)"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Disable Animations</div><div class="settings-row-desc">Stop all moving elements</div></div>
+        <div class="toggle" id="animToggle" onclick="toggleClass(this,'on'); document.body.classList.toggle('no-animation',this.classList.contains('on'))"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Word Definitions on Click</div><div class="settings-row-desc">Tap highlighted words to see meaning</div></div>
+        <div class="toggle on" id="wordDefToggle" onclick="toggleClass(this,'on'); state.wordDefEnabled=this.classList.contains('on')"></div>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Voice Guidance</div><div class="settings-row-desc">Speak interface hints aloud</div></div>
+        <div class="toggle" id="voiceGuideToggle" onclick="toggleClass(this,'on'); state.voiceGuideEnabled=this.classList.contains('on')"></div>
+      </div>
+    </div>
+
+    <div class="settings-group">
+      <div class="settings-group-title">⏱️ Focus & Pacing</div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Pomodoro Session Length</div><div class="settings-row-desc">Study in timed sprints with breaks</div></div>
+        <select class="settings-select" id="pomoDurationSelect" onchange="setPomoDuration(parseInt(this.value))">
+          <option value="10">10 min sessions</option>
+          <option value="15">15 min sessions</option>
+          <option value="20">20 min sessions</option>
+          <option value="25" selected>25 min sessions</option>
+          <option value="30">30 min sessions</option>
+        </select>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-row-label">Chunk Content</div><div class="settings-row-desc">Show one section at a time</div></div>
+        <div class="toggle on" id="chunkToggle" onclick="toggleClass(this,'on'); state.chunkMode=this.classList.contains('on')"></div>
+      </div>
+    </div>
+
+    <button class="apply-btn" style="margin-top:8px;" onclick="saveSettings()">💾 Save Preferences</button>
+  </div>
+</div>
+
+<!-- ==================== CHATBOT ==================== -->
+<div class="chatbot-wrap">
+  <button class="chatbot-toggle" onclick="toggleChatbot()">🤖</button>
+  <div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+      🤖 NeuroBot
+      <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="msg bot">👋 Hi! I'm NeuroBot. Ask me anything — I'll explain it simply!</div>
+      <div class="msg bot">Try: "What is photosynthesis?" or "Explain fractions"</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendChat()">
+      <button onclick="sendChat()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCRIPT ==================== -->
+<script>
+/* ======================================================
+   DATA — SUBJECTS
+====================================================== */
+const SUBJECTS = [
+  {
+    id:'science', title:'Science', icon:'🔬', desc:'Discover how the natural world works', color:'#2DB89E',
+    chapters:[
+      {id:'plants', title:'Plants & Photosynthesis', done:false},
+      {id:'animals', title:'Animals & Habitats', done:false},
+      {id:'earth', title:'Earth & Solar System', done:false},
+      {id:'matter', title:'States of Matter', done:false}
+    ]
+  },
+  {
+    id:'history', title:'History', icon:'🏛️', desc:'Explore civilizations and world events', color:'#E8603A',
+    chapters:[
+      {id:'ancient', title:'Ancient Civilizations', done:false},
+      {id:'medieval', title:'The Middle Ages', done:false},
+      {id:'modern', title:'Modern World History', done:false}
+    ]
+  },
+  {
+    id:'english', title:'English', icon:'📚', desc:'Reading, writing and grammar skills', color:'#4A5CE8',
+    chapters:[
+      {id:'grammar', title:'Grammar Basics', done:false},
+      {id:'reading', title:'Reading Comprehension', done:false},
+      {id:'writing', title:'Creative Writing', done:false}
+    ]
+  },
+  {
+    id:'cs', title:'Computer Science', icon:'💻', desc:'Coding, internet and algorithms', color:'#C062B8',
+    chapters:[
+      {id:'computer-basics', title:'What is a Computer?', done:false},
+      {id:'internet', title:'How the Internet Works', done:false},
+      {id:'algorithms', title:'Algorithms & Logic', done:false}
+    ]
+  },
+  {
+    id:'geography', title:'Geography', icon:'🌍', desc:'Countries, climates and continents', color:'#5AAA5A',
+    chapters:[
+      {id:'continents', title:'World Continents', done:false},
+      {id:'climate', title:'Climate & Weather', done:false},
+      {id:'maps', title:'Reading Maps', done:false}
+    ]
+  },
+  {
+    id:'general', title:'General Knowledge', icon:'🌟', desc:'Life skills and critical thinking', color:'#F0A020',
+    chapters:[
+      {id:'life-skills', title:'Life Skills & Etiquette', done:false},
+      {id:'critical-thinking', title:'Critical Thinking', done:false},
+      {id:'health', title:'Health & Wellness', done:false}
+    ]
+  }
+];
+
+/* ======================================================
+   LESSON DATA — fully expanded with 4 quizzes each + visuals
+====================================================== */
+const LESSONS = {
+
+  /* ---- SCIENCE ---- */
+  plants:{
+    title:'Plants & Photosynthesis', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'🌿 What are Plants?',
+       text:`Plants are living <span class="key-word" data-def="A living thing that grows, breathes, eats, and reproduces">organisms</span> that grow almost everywhere on Earth — from rainforests to deserts. Unlike animals, plants make their own food using <span class="key-word" data-def="Energy from the Sun that travels as light waves">sunlight</span>.`,
+       visual:{icon:'🌱🌳🌻', caption:'Plants come in thousands of shapes and sizes'}},
+      {type:'key', heading:'☀️ What is Photosynthesis?',
+       text:`<span class="key-word" data-def="The process plants use to turn sunlight, water and CO₂ into sugar and oxygen">Photosynthesis</span> is a plant's way of making food. It happens inside the <span class="key-word" data-def="The green pigment in leaves that captures sunlight">chlorophyll</span> in leaves. The plant takes in sunlight, water from the soil, and carbon dioxide from the air — and creates sugar (food) plus <span class="key-word" data-def="The gas released by plants that animals need to breathe">oxygen</span>.`,
+       note:'💡 Every breath of oxygen you take came from a plant doing photosynthesis!'},
+      {type:'visual', heading:'📊 The Photosynthesis Formula',
+       text:`The simple equation is: <strong>Sunlight + Water + CO₂ → Sugar + Oxygen</strong>. The leaves act like tiny solar panels!`,
+       visual:{icon:'🌞 + 💧 + 🌬️ → 🍬 + 💨', caption:'Sunlight + Water + Carbon Dioxide → Sugar + Oxygen'}},
+      {type:'text', heading:'🌱 Parts of a Plant',
+       text:`Each part has a job: <span class="key-word" data-def="Underground parts that absorb water and anchor the plant">Roots</span> drink water. The <span class="key-word" data-def="The main stalk that carries water up and supports the plant">stem</span> is the highway carrying water upward. <span class="key-word" data-def="Flat green parts where photosynthesis happens">Leaves</span> collect sunlight. The <span class="key-word" data-def="Colourful part that attracts insects to help with reproduction">flower</span> helps the plant reproduce and make seeds.`}
+    ],
+    flashcards:[
+      {front:'What is photosynthesis?', back:'Plants making food using sunlight, water and CO₂ — releasing oxygen as a bonus!'},
+      {front:'Where does photosynthesis happen?', back:'In the leaves — inside the green chlorophyll pigment.'},
+      {front:'What do roots do?', back:'Roots absorb water and minerals from the soil and anchor the plant.'},
+      {front:'What gas do plants release?', back:'Oxygen! The same gas all animals need to breathe.'},
+      {front:'Name the inputs of photosynthesis', back:'Sunlight, Water (H₂O), and Carbon Dioxide (CO₂).'}
+    ],
+    quiz:[
+      {q:'What three things do plants need for photosynthesis?',
+       options:['Moonlight, salt, soil','Sunlight, water, CO₂','Darkness, oxygen, sugar','Rain, soil, moonlight'],
+       answer:1, explanation:'Plants use sunlight, water and carbon dioxide to make food through photosynthesis!'},
+      {q:'Which gas do plants release during photosynthesis?',
+       options:['Carbon dioxide','Nitrogen','Hydrogen','Oxygen'],
+       answer:3, explanation:'Plants release oxygen — which is what humans and animals breathe!'},
+      {q:'Where does photosynthesis mainly take place?',
+       options:['Roots','Stem','Leaves','Flowers'],
+       answer:2, explanation:'The leaves contain chlorophyll which captures sunlight to power photosynthesis.'},
+      {q:'What part of the plant absorbs water from the soil?',
+       options:['Leaves','Stem','Flowers','Roots'],
+       answer:3, explanation:'The roots absorb water from the soil and send it up through the stem.'}
+    ]
+  },
+
+  animals:{
+    title:'Animals & Habitats', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'🐾 What is an Animal?',
+       text:`An <span class="key-word" data-def="A living organism that eats food, breathes, moves and reproduces">animal</span> is a living being that must eat other organisms to survive — unlike plants which make their own food. Animals range from tiny insects to massive blue whales.`,
+       visual:{icon:'🦁🐬🦅🐝', caption:'Animals live in every environment on Earth'}},
+      {type:'key', heading:'🏠 What is a Habitat?',
+       text:`A <span class="key-word" data-def="The natural environment where an organism lives, finds food and shelter">habitat</span> is the natural home of an animal. Different animals are <span class="key-word" data-def="Suited to survive and thrive in a specific environment">adapted</span> to their habitat. A polar bear's thick fur is an adaptation for the <span class="key-word" data-def="The cold, icy region around the North Pole">Arctic</span>.`,
+       note:'🌍 Destroying habitats is the biggest threat to wild animals today.'},
+      {type:'visual', heading:'🗺️ Types of Habitats',
+       text:`Major habitats include: <strong>Forest</strong> (rich with food and shelter), <strong>Ocean</strong> (covers 70% of Earth), <strong>Desert</strong> (hot and dry), <strong>Arctic/Antarctic</strong> (freezing cold), and <strong>Grasslands</strong>.`,
+       visual:{icon:'🌊🏜️🌲❄️🌾', caption:'Different habitats support different life'}},
+      {type:'text', heading:'🍖 Food Chains',
+       text:`Energy flows through a <span class="key-word" data-def="A series of organisms where each feeds on the one before it">food chain</span>. Plants → Insects → Frogs → Snakes → Eagles. Removing any link can damage the whole chain.`}
+    ],
+    flashcards:[
+      {front:'What is a habitat?', back:'The natural home where an animal finds food, shelter, and mates.'},
+      {front:'What is adaptation?', back:'A feature that helps an animal survive in its specific habitat (e.g., polar bear fur).'},
+      {front:'What is a food chain?', back:'A sequence showing who eats who — Plants → Herbivores → Carnivores.'},
+      {front:'Name 3 types of habitat', back:'Ocean, Forest, Desert, Arctic, Grassland — any 3 are correct!'},
+      {front:'Why are habitats important?', back:'They provide animals with food, shelter, water, and space to reproduce.'}
+    ],
+    quiz:[
+      {q:'What is an animal\'s habitat?',
+       options:['The food it eats','Its natural home environment','Its skin colour','Its body temperature'],
+       answer:1, explanation:'A habitat is the natural environment where an animal lives, finds food and shelter.'},
+      {q:'What is adaptation in animals?',
+       options:['Moving to a new country','Eating vegetables','Features that help survive in a specific environment','Making a nest'],
+       answer:2, explanation:'Adaptations like thick fur or fins help animals survive in their specific habitat.'},
+      {q:'What covers 70% of the Earth?',
+       options:['Forests','Deserts','Grasslands','Oceans'],
+       answer:3, explanation:'The ocean is the largest habitat on Earth, covering about 70% of the planet\'s surface.'},
+      {q:'What happens if a link in a food chain is removed?',
+       options:['Nothing changes','The chain becomes stronger','It can damage the whole chain','Animals get bigger'],
+       answer:2, explanation:'Every part of a food chain is connected — removing one organism affects all others.'}
+    ]
+  },
+
+  earth:{
+    title:'Earth & Solar System', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'🌍 Our Amazing Planet',
+       text:`Earth is the <span class="key-word" data-def="The third planet from the Sun in our Solar System">third planet</span> from the Sun and the only known planet with life. It is part of our <span class="key-word" data-def="The Sun and all the planets, moons and objects that orbit it">Solar System</span>, which has 8 planets.`,
+       visual:{icon:'🌍☀️🌕', caption:'Earth, the Sun, and the Moon'}},
+      {type:'key', heading:'☀️ The Solar System',
+       text:`Our Solar System has 8 planets: <span class="key-word" data-def="Rocky planet closest to the Sun, very hot in the day and cold at night">Mercury</span>, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune. The Sun is a <span class="key-word" data-def="A giant ball of hot gas that produces light and heat by nuclear fusion">star</span> at the centre.`,
+       note:'🪐 A day on Venus is longer than a year on Venus!'},
+      {type:'visual', heading:'🌙 Why Do We Have Day and Night?',
+       text:`Earth spins on its <span class="key-word" data-def="An imaginary line through the centre of Earth from North Pole to South Pole">axis</span> once every 24 hours. The side facing the Sun has day; the side facing away has night.`,
+       visual:{icon:'🌏🔄☀️', caption:'Earth rotates — giving us day and night every 24 hours'}},
+      {type:'text', heading:'🌡️ Earth\'s Layers',
+       text:`Earth has 4 layers: <span class="key-word" data-def="The thin, solid outer shell we live on — about 30km thick">Crust</span> (we live here), <span class="key-word" data-def="The thick rocky layer below the crust — partly molten">Mantle</span>, <span class="key-word" data-def="The liquid iron-nickel layer surrounding the inner core">Outer Core</span>, and <span class="key-word" data-def="The solid iron-nickel ball at the very centre of Earth — hottest point">Inner Core</span>.`}
+    ],
+    flashcards:[
+      {front:'Which planet is third from the Sun?', back:'Earth — our home planet, the only one known to have life.'},
+      {front:'How many planets are in our Solar System?', back:'8 planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.'},
+      {front:'Why do we have day and night?', back:'Because Earth spins on its axis — the Sun-facing side gets day, the other side gets night.'},
+      {front:'What is at the centre of our Solar System?', back:'The Sun — a giant star that provides heat and light to all planets.'},
+      {front:'Name Earth\'s 4 layers from outside to inside', back:'Crust → Mantle → Outer Core → Inner Core'}
+    ],
+    quiz:[
+      {q:'How many planets are in our Solar System?',
+       options:['7','8','9','10'],
+       answer:1, explanation:'There are 8 planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.'},
+      {q:'What causes day and night on Earth?',
+       options:['Earth orbiting the Sun','The Moon blocking the Sun','Earth spinning on its axis','Clouds covering the Sun'],
+       answer:2, explanation:'Earth rotates (spins) on its axis every 24 hours, causing day and night.'},
+      {q:'Which is the smallest planet in the Solar System?',
+       options:['Venus','Earth','Mars','Mercury'],
+       answer:3, explanation:'Mercury is the smallest planet and also the closest to the Sun.'},
+      {q:'What is Earth\'s outermost layer called?',
+       options:['Mantle','Outer Core','Crust','Inner Core'],
+       answer:2, explanation:'The Crust is the thin solid outer shell of Earth where we live.'}
+    ]
+  },
+
+  matter:{
+    title:'States of Matter', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'🧊 What is Matter?',
+       text:`Everything around you is made of <span class="key-word" data-def="Anything that has mass and takes up space">matter</span>. Your chair, water, air — it's all matter. Matter exists in three main <span class="key-word" data-def="The different forms matter can take depending on temperature and pressure">states</span>: Solid, Liquid, and Gas.`,
+       visual:{icon:'🧊💧☁️', caption:'Ice (solid), Water (liquid), Steam (gas) — all the same substance!'}},
+      {type:'key', heading:'🧱 Solid, Liquid, Gas',
+       text:`A <span class="key-word" data-def="Matter with fixed shape and volume — particles packed tightly">solid</span> has a fixed shape (like a rock). A <span class="key-word" data-def="Matter with fixed volume but no fixed shape — takes the shape of its container">liquid</span> takes the shape of its container (like juice). A <span class="key-word" data-def="Matter with no fixed shape or volume — particles spread out freely">gas</span> fills all available space (like air).`,
+       note:'🔥 Matter changes state when heated or cooled!'},
+      {type:'visual', heading:'🌡️ Changing States',
+       text:`Heating makes matter change: Ice (solid) → Water (liquid) → Steam (gas). Cooling reverses it: Steam → Water → Ice.`,
+       visual:{icon:'🧊→💧→💨', caption:'Heat causes melting (solid→liquid) and evaporation (liquid→gas)'}},
+      {type:'text', heading:'⚗️ Examples Around You',
+       text:`<span class="key-word" data-def="When a solid turns into a liquid by heating">Melting</span>: chocolate in your hands. <span class="key-word" data-def="When a liquid turns into a gas">Evaporation</span>: puddles disappearing after rain. <span class="key-word" data-def="When a gas cools and turns into a liquid — water droplets on a cold glass">Condensation</span>: water forming on a cold glass.`}
+    ],
+    flashcards:[
+      {front:'Name the 3 states of matter', back:'Solid (fixed shape), Liquid (fixed volume), Gas (no fixed shape or volume).'},
+      {front:'What happens when a solid is heated?', back:'It melts and becomes a liquid.'},
+      {front:'What is evaporation?', back:'When a liquid turns into a gas by heating — like puddles drying up.'},
+      {front:'What is condensation?', back:'When a gas cools and turns into a liquid — like water drops on a cold glass.'},
+      {front:'What state does water exist in naturally?', back:'All 3! Ice (solid), Water (liquid), Clouds/Steam (gas).'}
+    ],
+    quiz:[
+      {q:'Which state of matter has a fixed shape?',
+       options:['Gas','Liquid','Solid','Plasma'],
+       answer:2, explanation:'Solids have particles tightly packed together, giving them a fixed shape.'},
+      {q:'What is it called when ice turns into water?',
+       options:['Evaporation','Condensation','Melting','Freezing'],
+       answer:2, explanation:'Melting is when a solid (ice) absorbs heat and becomes a liquid (water).'},
+      {q:'What state does water turn into when it reaches 100°C?',
+       options:['Solid','A bigger liquid','Gas (steam)','It disappears'],
+       answer:2, explanation:'At 100°C, water evaporates and becomes steam — a gas.'},
+      {q:'What is condensation?',
+       options:['Gas turning to solid','Liquid turning to gas','Gas cooling into liquid','Solid melting to liquid'],
+       answer:2, explanation:'Condensation is when a gas (water vapour) cools and turns into a liquid (water drops).'}
+    ]
+  },
+
+  /* ---- HISTORY ---- */
+  ancient:{
+    title:'Ancient Civilizations', readTime:'9 min',
+    chunks:[
+      {type:'intro', heading:'🏛️ What is a Civilization?',
+       text:`A <span class="key-word" data-def="An advanced society with cities, writing, laws, and organised government">civilization</span> is an advanced group of people living together with cities, laws, and art. The first great civilizations formed along river banks about 5,000 years ago.`,
+       visual:{icon:'🏛️🌊🏺', caption:'Ancient civilizations rose along great rivers'}},
+      {type:'key', heading:'🌊 The First Civilizations',
+       text:`The oldest known civilizations are: <span class="key-word" data-def="The civilization of ancient Egypt, famous for the Nile River and pyramids">Ancient Egypt</span> (Nile River), <span class="key-word" data-def="One of the oldest civilizations, located in modern-day Iraq between the Tigris and Euphrates rivers">Mesopotamia</span> (Iraq), <span class="key-word" data-def="Ancient civilization in modern India/Pakistan along the Indus River">Indus Valley</span>, and <span class="key-word" data-def="Ancient civilization along the Yellow River in modern China">Ancient China</span>.`,
+       note:'✍️ The ancient Sumerians in Mesopotamia invented writing around 3400 BC!'},
+      {type:'visual', heading:'⚡ Ancient Egypt',
+       text:`Egypt is famous for its <span class="key-word" data-def="Massive stone tomb structures built for pharaohs in ancient Egypt">pyramids</span>, <span class="key-word" data-def="The ruler of ancient Egypt, considered a god-king">pharaohs</span>, and writing called <span class="key-word" data-def="Ancient Egyptian picture-writing system used on stone and papyrus">hieroglyphics</span>. The Great Pyramid at Giza was built around 2560 BC.`,
+       visual:{icon:'🔺🌕🦅', caption:'The pyramids of ancient Egypt — built over 4,500 years ago!'}},
+      {type:'text', heading:'🏛️ Ancient Greece & Rome',
+       text:`<span class="key-word" data-def="Ancient civilization in modern Greece — birthplace of democracy, philosophy and the Olympics">Ancient Greece</span> gave the world democracy, philosophy, and the Olympic Games. <span class="key-word" data-def="The powerful ancient civilization centred in Rome, which built a vast empire across Europe and Africa">Ancient Rome</span> built roads, laws, and an empire across Europe and Africa.`}
+    ],
+    flashcards:[
+      {front:'Where did ancient Egyptian civilization develop?', back:'Along the Nile River in North Africa — the river flooded yearly, making the soil fertile.'},
+      {front:'What is a pharaoh?', back:'The god-king ruler of ancient Egypt — considered both a king and a god.'},
+      {front:'What did the Sumerians invent around 3400 BC?', back:'Writing! The first writing system called cuneiform, carved onto clay tablets.'},
+      {front:'What did Ancient Greece give the world?', back:'Democracy (people\'s government), philosophy, and the Olympic Games.'},
+      {front:'What are hieroglyphics?', back:'The ancient Egyptian picture-writing system used on stone walls and papyrus.'}
+    ],
+    quiz:[
+      {q:'Where did ancient Egyptian civilization develop?',
+       options:['Along the Ganges River','Along the Amazon River','Along the Nile River','Along the Thames River'],
+       answer:2, explanation:'The Nile River flooded every year, making soil fertile — perfect for building a civilization!'},
+      {q:'Who invented the first writing system?',
+       options:['The Greeks','The Romans','The Egyptians','The Sumerians of Mesopotamia'],
+       answer:3, explanation:'The Sumerians (in modern Iraq) invented cuneiform writing around 3400 BC!'},
+      {q:'What is a pharaoh?',
+       options:['A type of pyramid','An Egyptian ship','The god-king ruler of ancient Egypt','A type of hieroglyphic'],
+       answer:2, explanation:'The pharaoh was the supreme ruler of ancient Egypt, believed to be a god in human form.'},
+      {q:'What did Ancient Greece invent that we still use today?',
+       options:['The internet','Democracy and the Olympics','Calculus','The alphabet alone'],
+       answer:1, explanation:'Ancient Greeks created democracy (people voting on laws) and started the Olympic Games in 776 BC!'}
+    ]
+  },
+
+  medieval:{
+    title:'The Middle Ages', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'🏰 What Were the Middle Ages?',
+       text:`The Middle Ages (also called the <span class="key-word" data-def="The historical period from about 500 AD to 1500 AD in Europe">Medieval Period</span>) lasted from about 500 AD to 1500 AD. After the fall of the Roman Empire, Europe changed dramatically. Life revolved around castles, churches, and farming.`,
+       visual:{icon:'🏰⚔️⛪', caption:'Castles, knights and cathedrals defined the Middle Ages'}},
+      {type:'key', heading:'🤴 Feudal System',
+       text:`Society was organized in a <span class="key-word" data-def="A system where kings gave land to lords, who gave it to knights, who protected peasants in return">feudal system</span>. At the top sat the <span class="key-word" data-def="The supreme ruler who owned all land in the kingdom">King</span>. Below were <span class="key-word" data-def="Nobles who received land from the king in return for military service">Lords</span>, then <span class="key-word" data-def="Warriors on horseback who served a lord — promised to protect the weak">Knights</span>, and at the bottom, <span class="key-word" data-def="Farmers who worked the land in return for protection">Peasants</span>.`,
+       note:'🧅 Peasants gave much of their food and income to lords as payment (tax).'},
+      {type:'visual', heading:'⚔️ The Crusades',
+       text:`The <span class="key-word" data-def="A series of religious wars from 1095–1291 where European Christians fought to control Jerusalem">Crusades</span> were a series of religious wars. European kings and knights traveled to the Holy Land (modern Israel/Palestine) to capture Jerusalem.`,
+       visual:{icon:'✝️🗺️⚔️🌙', caption:'Crusaders journeyed thousands of miles to fight for holy lands'}},
+      {type:'text', heading:'🎭 Life in the Middle Ages',
+       text:`Most people were <span class="key-word" data-def="Farmers who lived and worked on a lord's land in exchange for protection">serfs</span> or peasants. The <span class="key-word" data-def="The powerful Christian religious organisation centred in Rome">Catholic Church</span> was very powerful. The <span class="key-word" data-def="A deadly disease (bubonic plague) that killed about 1/3 of Europe's population in the 1300s">Black Death</span> (1347-1351) killed roughly one-third of Europe's people.`}
+    ],
+    flashcards:[
+      {front:'What time period were the Middle Ages?', back:'Roughly 500 AD to 1500 AD — about 1,000 years of history.'},
+      {front:'What was the feudal system?', back:'A social structure: King → Lords → Knights → Peasants. Land given in exchange for loyalty and service.'},
+      {front:'Who were knights?', back:'Warriors on horseback who served lords, promised to protect people and follow a code of honor.'},
+      {front:'What were the Crusades?', back:'Religious wars (1095–1291) where European Christians fought to control Jerusalem.'},
+      {front:'What was the Black Death?', back:'A deadly plague (1347–1351) that killed about one-third of Europe\'s population.'}
+    ],
+    quiz:[
+      {q:'When did the Middle Ages take place?',
+       options:['100 BC to 100 AD','500 AD to 1500 AD','1600 to 1900','2000 BC to 0 AD'],
+       answer:1, explanation:'The Middle Ages ran from roughly 500 AD (fall of Rome) to 1500 AD (start of Renaissance).'},
+      {q:'In the feudal system, who was at the very top?',
+       options:['Knights','Peasants','Lords','The King'],
+       answer:3, explanation:'The King was at the top of the feudal pyramid — he owned all the land in the kingdom.'},
+      {q:'What were the Crusades?',
+       options:['Agricultural techniques','Military campaigns to control Jerusalem','A type of castle','A peasant revolution'],
+       answer:1, explanation:'The Crusades were religious wars (1095-1291) to control the Holy Land (Jerusalem).'},
+      {q:'What was the Black Death?',
+       options:['A type of armour','A medieval tax','A devastating plague killing ~1/3 of Europe','A famous battle'],
+       answer:2, explanation:'The Black Death (bubonic plague, 1347-1351) killed about one-third of Europe\'s entire population.'}
+    ]
+  },
+
+  modern:{
+    title:'Modern World History', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'🌐 What is Modern History?',
+       text:`<span class="key-word" data-def="The period of history from roughly 1500 to the present day">Modern history</span> begins around 1500 AD. It includes the <span class="key-word" data-def="A great rebirth of art, science and learning in Europe from the 14th to 17th centuries">Renaissance</span>, the <span class="key-word" data-def="A period from the 18th century when machines replaced hand labor, transforming industry">Industrial Revolution</span>, two World Wars, and the digital age.`,
+       visual:{icon:'🏭✈️🌐💻', caption:'From steam engines to the internet — 500 years of change'}},
+      {type:'key', heading:'⚙️ The Industrial Revolution',
+       text:`The <span class="key-word" data-def="Period (1760s–1840s) when machines powered by coal and steam replaced hand tools in factories">Industrial Revolution</span> began in Britain around the 1760s. Inventions like the <span class="key-word" data-def="An engine powered by steam, used in factories and locomotives">steam engine</span> transformed farming, travel, and factory work. Cities grew rapidly.`,
+       note:'🏭 Before factories, most goods were made by hand at home.'},
+      {type:'visual', heading:'🌍 The World Wars',
+       text:`<span class="key-word" data-def="The First World War (1914–1918) — fought mainly in Europe, killing over 17 million people">World War I</span> (1914–1918) and <span class="key-word" data-def="The Second World War (1939–1945) — the deadliest conflict in human history, killing over 70 million">World War II</span> (1939–1945) were the deadliest conflicts in human history. WWII ended with the atomic bombing of Japan and the Holocaust.`,
+       visual:{icon:'🌍⚔️🕊️', caption:'Two World Wars reshaped the political map of the entire Earth'}},
+      {type:'text', heading:'💻 The Digital Age',
+       text:`After 1945, the <span class="key-word" data-def="The era of computers, internet, and smartphones that began in the late 20th century">Digital Age</span> brought computers (1950s), the <span class="key-word" data-def="A global network connecting computers worldwide, invented in the 1980s">internet</span> (1980s), and smartphones (2000s). The world became deeply connected.`}
+    ],
+    flashcards:[
+      {front:'When did the Industrial Revolution begin?', back:'In Britain around the 1760s — coal, steam and machines changed everything.'},
+      {front:'What years did World War I last?', back:'1914 to 1918 — fought mainly in Europe, killing over 17 million people.'},
+      {front:'What years did World War II last?', back:'1939 to 1945 — the deadliest conflict in history (over 70 million deaths).'},
+      {front:'What is the Renaissance?', back:'A great rebirth of art, science and learning in Europe (14th–17th centuries).'},
+      {front:'What invention started the Industrial Revolution?', back:'The steam engine — it powered factories, ships and trains.'}
+    ],
+    quiz:[
+      {q:'Where did the Industrial Revolution begin?',
+       options:['France','Germany','Britain','USA'],
+       answer:2, explanation:'The Industrial Revolution started in Britain in the 1760s before spreading worldwide.'},
+      {q:'When did World War I start?',
+       options:['1900','1914','1939','1945'],
+       answer:1, explanation:'World War I began in 1914 and ended in 1918 — called "The Great War."'},
+      {q:'What invention powered the Industrial Revolution?',
+       options:['The internet','The printing press','The atomic bomb','The steam engine'],
+       answer:3, explanation:'The steam engine (powered by burning coal) drove factories, trains and ships.'},
+      {q:'When was the internet invented?',
+       options:['1950s','1970s','1980s','2000s'],
+       answer:2, explanation:'The internet was developed in the 1980s and became widely available to the public in the 1990s.'}
+    ]
+  },
+
+  /* ---- ENGLISH ---- */
+  grammar:{
+    title:'Grammar Basics', readTime:'9 min',
+    chunks:[
+      {type:'intro', heading:'📝 What is Grammar?',
+       text:`<span class="key-word" data-def="The set of rules that governs how words work together in a language">Grammar</span> is the rulebook of language. When we follow grammar, other people can understand us clearly. Without grammar, sentences become confusing!`,
+       visual:{icon:'📖✏️🗣️', caption:'Good grammar makes communication clear and powerful'}},
+      {type:'key', heading:'🔤 The 8 Parts of Speech',
+       text:`Words have jobs: A <span class="key-word" data-def="A word that names a person, place, thing or idea — 'dog', 'school', 'love'">noun</span> names things. A <span class="key-word" data-def="A word that shows action or state — 'run', 'is', 'think'">verb</span> shows action. An <span class="key-word" data-def="Describes a noun — 'big', 'happy', 'red'">adjective</span> describes nouns. An <span class="key-word" data-def="Describes a verb — 'quickly', 'very', 'carefully'">adverb</span> describes verbs. A <span class="key-word" data-def="Takes the place of a noun — 'he', 'she', 'they', 'it'">pronoun</span> replaces a noun.`,
+       note:'💡 Every word in English belongs to one of 8 categories called Parts of Speech.'},
+      {type:'visual', heading:'📐 Building a Sentence',
+       text:`Every sentence needs: a <strong>Subject</strong> (who/what does it) + a <strong>Verb</strong> (what they do) + optional <strong>Object</strong>. Example: "The dog [subject] ate [verb] a biscuit [object]."`,
+       visual:{icon:'👤 + ⚡ + 🎯', caption:'Subject + Verb + Object = A complete sentence!'}},
+      {type:'text', heading:'❓ Punctuation',
+       text:`<span class="key-word" data-def="A full stop (.) used at the end of a sentence">Full stops</span>, <span class="key-word" data-def="A question mark (?) used at the end of a question">question marks</span>, and <span class="key-word" data-def="An exclamation mark (!) used to show excitement or strong feeling">exclamation marks</span> end sentences. <span class="key-word" data-def="A comma (,) creates a pause within a sentence">Commas</span> create pauses. Capitals start sentences and proper nouns.`}
+    ],
+    flashcards:[
+      {front:'What is a noun?', back:'A word that names a person, place, thing or idea. Examples: "dog", "city", "happiness."'},
+      {front:'What is a verb?', back:'A word that shows an action or state. Examples: "run", "is", "think", "jump."'},
+      {front:'What is an adjective?', back:'A word that describes a noun. Examples: "big", "happy", "red", "fast."'},
+      {front:'What is an adverb?', back:'A word that describes a verb. Examples: "quickly", "carefully", "very", "today."'},
+      {front:'What does a sentence need minimum?', back:'A subject (who/what) and a verb (what they do). E.g., "Birds fly."'}
+    ],
+    quiz:[
+      {q:'Which word is a NOUN in: "The clever dog barked loudly"?',
+       options:['clever','barked','dog','loudly'],
+       answer:2, explanation:'"Dog" is a noun — it names the animal (a thing). "Clever" is adjective, "barked" is verb, "loudly" is adverb.'},
+      {q:'Which word is a VERB in: "She quickly painted the wall"?',
+       options:['quickly','She','wall','painted'],
+       answer:3, explanation:'"Painted" is the verb — it shows the action that happened.'},
+      {q:'What does an adjective describe?',
+       options:['A verb','A pronoun','A noun','An adverb'],
+       answer:2, explanation:'Adjectives describe nouns — e.g., "big dog" (big describes dog).'},
+      {q:'Which is a PRONOUN in: "She gave him the book"?',
+       options:['gave','book','She','the'],
+       answer:2, explanation:'"She" is a pronoun — it replaces a person\'s name and takes the place of a noun.'}
+    ]
+  },
+
+  reading:{
+    title:'Reading Comprehension', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'📖 What is Comprehension?',
+       text:`<span class="key-word" data-def="The ability to read text and understand its meaning, not just the words">Reading comprehension</span> means truly understanding what you read — not just recognising the words. It involves finding the <span class="key-word" data-def="The most important idea the author wants to communicate">main idea</span> and supporting details.`,
+       visual:{icon:'👁️📄💡', caption:'Good readers actively think about what they are reading'}},
+      {type:'key', heading:'🔍 Finding the Main Idea',
+       text:`The <span class="key-word" data-def="The central point or most important idea of a text">main idea</span> is what a paragraph is mainly about. <span class="key-word" data-def="Smaller pieces of information that support and explain the main idea">Supporting details</span> give evidence. Ask yourself: "What is this passage mainly talking about?"`,
+       note:'💡 The main idea is often in the first or last sentence of a paragraph.'},
+      {type:'visual', heading:'📝 Types of Questions',
+       text:`Comprehension questions can be: <strong>Literal</strong> (the answer is directly stated), <strong>Inferential</strong> (you must work it out from clues), or <strong>Evaluative</strong> (your opinion with reasons).`,
+       visual:{icon:'❓📝🤔', caption:'Three types of comprehension questions — from simple to complex'}},
+      {type:'text', heading:'🗝️ Reading Strategies',
+       text:`Good readers: <span class="key-word" data-def="Read a text again to better understand or find specific information">re-read</span> confusing parts, look at <span class="key-word" data-def="Visual clues like pictures, headings and diagrams that help understanding">context clues</span>, break <span class="key-word" data-def="Words you don't know — break them into parts to figure out meaning">unfamiliar words</span> into parts, and summarise in their own words.`}
+    ],
+    flashcards:[
+      {front:'What is the main idea?', back:'The most important or central point of a text — what it is mainly about.'},
+      {front:'What are supporting details?', back:'Facts, examples or reasons that support and explain the main idea.'},
+      {front:'What is a literal question?', back:'A question whose answer is directly stated in the text (just find and read it!).'},
+      {front:'What is an inferential question?', back:'A question where you must use clues in the text to figure out the answer.'},
+      {front:'Name 2 good reading strategies', back:'Re-reading confusing parts AND looking for context clues around unknown words.'}
+    ],
+    quiz:[
+      {q:'What does reading comprehension mean?',
+       options:['Reading very fast','Memorising every word','Truly understanding what you read','Counting the words'],
+       answer:2, explanation:'Comprehension means understanding the meaning, ideas and purpose of a text.'},
+      {q:'Where is the main idea often found?',
+       options:['In the middle of every paragraph','Only at the end of the whole text','In the first or last sentence of a paragraph','In pictures'],
+       answer:2, explanation:'Authors often state the main idea at the start or end of a paragraph as a topic sentence.'},
+      {q:'What is a literal question?',
+       options:['One you must guess','One whose answer is directly in the text','One about your opinion','One about pictures'],
+       answer:1, explanation:'Literal questions have answers directly stated in the text — you just need to find them.'},
+      {q:'What is an inferential question?',
+       options:['A question about numbers','A question directly answered in the text','A question where you use clues to figure out the answer','A question about grammar'],
+       answer:2, explanation:'Inferential questions need you to "read between the lines" using clues and prior knowledge.'}
+    ]
+  },
+
+  writing:{
+    title:'Creative Writing', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'✍️ What is Creative Writing?',
+       text:`<span class="key-word" data-def="Writing that uses imagination, characters, and storytelling to express ideas and emotions">Creative writing</span> is telling stories. It includes fiction, poetry, screenplays, and personal narratives. Good writing makes readers feel, think, and imagine.`,
+       visual:{icon:'✍️📖🌟', caption:'Creative writing brings ideas to life through words'}},
+      {type:'key', heading:'📖 Story Structure',
+       text:`Most stories follow a structure: <span class="key-word" data-def="Introduces the setting, characters, and situation at the start of a story">Introduction</span> → <span class="key-word" data-def="Events that build tension and lead toward the main problem">Rising Action</span> → <span class="key-word" data-def="The most exciting or tense moment of the story">Climax</span> → <span class="key-word" data-def="Events after the climax where problems start to be solved">Falling Action</span> → <span class="key-word" data-def="The ending where conflicts are resolved">Resolution</span>.`,
+       note:'📐 This story shape is called a "narrative arc" — used in most books, films and games!'},
+      {type:'visual', heading:'🎭 Characters & Setting',
+       text:`A <span class="key-word" data-def="A person or creature in a story whose actions and choices drive the plot">character</span> is who your story is about. The <span class="key-word" data-def="Where and when a story takes place — time period and location">setting</span> is where and when. Use specific details to make both feel real to the reader.`,
+       visual:{icon:'🧍🏫🌌', caption:'Strong characters + vivid settings = unforgettable stories'}},
+      {type:'text', heading:'🌈 Show, Don\'t Tell',
+       text:`The golden rule: <em>show</em> feelings through actions instead of <em>telling</em>. Instead of "She was scared," write "Her hands trembled as she reached for the handle." This uses <span class="key-word" data-def="Words that appeal to the five senses — sight, sound, smell, taste, touch">sensory language</span>.`}
+    ],
+    flashcards:[
+      {front:'What are the 5 parts of story structure?', back:'Introduction → Rising Action → Climax → Falling Action → Resolution.'},
+      {front:'What is the climax?', back:'The most exciting/tense moment of the story — the turning point.'},
+      {front:'What is a setting?', back:'Where and when a story takes place — the time and location.'},
+      {front:'What does "show, don\'t tell" mean?', back:'Show emotions through actions and sensory details instead of just stating them.'},
+      {front:'What is sensory language?', back:'Words that appeal to the 5 senses (sight, sound, smell, taste, touch) to make writing vivid.'}
+    ],
+    quiz:[
+      {q:'What is the climax of a story?',
+       options:['The boring middle part','The very beginning','The most exciting/tense moment','The last sentence'],
+       answer:2, explanation:'The climax is the highest point of tension — the turning point where everything changes.'},
+      {q:'What does "setting" mean in a story?',
+       options:['The main character\'s name','Where and when the story takes place','The moral lesson','The title'],
+       answer:1, explanation:'Setting is the time and place of a story — e.g., "Victorian London" or "a spaceship in 3050."'},
+      {q:'What does "Show, don\'t tell" mean?',
+       options:['Use pictures instead of words','Describe emotions through actions and senses, not labels','Only use dialogue','Write very short stories'],
+       answer:1, explanation:'Instead of "She was sad" (telling), write "Tears ran down her cheeks" (showing).'},
+      {q:'Which part of story structure comes FIRST?',
+       options:['Climax','Falling Action','Resolution','Introduction'],
+       answer:3, explanation:'The Introduction (or Exposition) comes first — it sets the scene, characters and situation.'}
+    ]
+  },
+
+  /* ---- COMPUTER SCIENCE ---- */
+  'computer-basics':{
+    title:'What is a Computer?', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'💻 What is a Computer?',
+       text:`A <span class="key-word" data-def="An electronic device that processes data according to instructions and stores information">computer</span> is an electronic machine that stores, processes, and outputs information. Computers follow detailed instructions called <span class="key-word" data-def="A set of step-by-step instructions that tell a computer what to do">programs</span> (or software).`,
+       visual:{icon:'💻🖥️📱', caption:'Computers come in many forms — laptops, desktops, tablets, phones'}},
+      {type:'key', heading:'🧩 Key Hardware Parts',
+       text:`The <span class="key-word" data-def="Central Processing Unit — the brain of the computer that performs calculations at billions of times per second">CPU</span> is the brain. <span class="key-word" data-def="Random Access Memory — fast, temporary storage the computer uses right now (lost when switched off)">RAM</span> is short-term memory. The <span class="key-word" data-def="Hard Disk Drive or SSD — permanent storage for files, photos, programs (kept when switched off)">Storage Drive</span> keeps files forever. The <span class="key-word" data-def="Graphics Processing Unit — specialised chip that handles images, video and games">GPU</span> handles images.`,
+       note:'🧠 A modern CPU can perform over 3 billion calculations every single second!'},
+      {type:'visual', heading:'⌨️ Input and Output',
+       text:`Input devices send data <em>into</em> the computer: <strong>keyboard, mouse, microphone, camera</strong>. Output devices bring data <em>out</em>: <strong>monitor, speaker, printer</strong>. The CPU processes everything in between.`,
+       visual:{icon:'⌨️➡️🖥️➡️🔊', caption:'Input → CPU processes → Output'}},
+      {type:'text', heading:'💾 Software vs Hardware',
+       text:`<span class="key-word" data-def="The physical parts of a computer you can touch — screen, keyboard, chips">Hardware</span> is everything you can physically touch. <span class="key-word" data-def="Programs and applications that run on hardware — you can't touch software">Software</span> is the programs that run on hardware. Without software, hardware is useless — like a book with no words!`}
+    ],
+    flashcards:[
+      {front:'What does CPU stand for?', back:'Central Processing Unit — the "brain" that performs all calculations.'},
+      {front:'What is RAM?', back:'Random Access Memory — fast but temporary storage used while the computer is running.'},
+      {front:'Difference between hardware and software?', back:'Hardware = physical parts you can touch. Software = programs you cannot touch.'},
+      {front:'Name 2 input devices', back:'Keyboard, mouse, microphone, camera, scanner — any 2 count!'},
+      {front:'Name 2 output devices', back:'Monitor (screen), speakers, printer, headphones — any 2 count!'}
+    ],
+    quiz:[
+      {q:'What is the CPU?',
+       options:['The screen','The keyboard','The brain/processor of the computer','The power cable'],
+       answer:2, explanation:'The CPU (Central Processing Unit) performs all calculations — it\'s the brain of the computer!'},
+      {q:'Which of these is an INPUT device?',
+       options:['Monitor','Speaker','Printer','Keyboard'],
+       answer:3, explanation:'A keyboard sends data INTO the computer — so it\'s an input device.'},
+      {q:'What is RAM used for?',
+       options:['Permanent file storage','Fast temporary storage while running programs','Displaying graphics','Connecting to internet'],
+       answer:1, explanation:'RAM holds data temporarily while you work — it\'s emptied when the computer turns off.'},
+      {q:'What is the difference between software and hardware?',
+       options:['There is no difference','Software is tangible, hardware is not','Hardware is physical parts; software is programs','Software is made of metal'],
+       answer:2, explanation:'Hardware = physical components (keyboard, chips, screen). Software = programs (apps, operating system).'}
+    ]
+  },
+
+  internet:{
+    title:'How the Internet Works', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'🌐 What is the Internet?',
+       text:`The <span class="key-word" data-def="A massive global network connecting billions of computers and devices so they can share information">internet</span> is a worldwide network connecting billions of computers. It was created in the 1980s by scientists who needed to share research quickly. It is NOT the same as the <span class="key-word" data-def="The World Wide Web — a system of web pages and links that uses the internet">World Wide Web</span>.`,
+       visual:{icon:'🌐🔗💻🌍', caption:'The internet connects billions of devices across every continent'}},
+      {type:'key', heading:'📦 How Data Travels',
+       text:`Information on the internet is broken into small chunks called <span class="key-word" data-def="Small pieces of data sent across a network — each packet finds its own route and they reassemble at the destination">packets</span>. These travel through cables, wi-fi signals, and satellites. Special computers called <span class="key-word" data-def="A device that directs packets of data along the fastest route through a network">routers</span> direct each packet.`,
+       note:'⚡ Data travels through fibre optic cables at nearly the speed of light!'},
+      {type:'visual', heading:'🔒 How Websites Work',
+       text:`Websites are stored on <span class="key-word" data-def="Powerful computers that store websites and send them to users when requested">servers</span>. When you type a web address, your computer sends a request, the server sends back the <span class="key-word" data-def="Hypertext Markup Language — the code that structures every web page">HTML</span> page, and your browser displays it.`,
+       visual:{icon:'💻→🌐→🖥️', caption:'Your request → travels the internet → reaches server → page returns to you'}},
+      {type:'text', heading:'🔐 Internet Safety',
+       text:`Stay safe online: use strong <span class="key-word" data-def="A secret combination of letters, numbers and symbols used to access an account">passwords</span>, never share personal information with strangers, look for <span class="key-word" data-def="A padlock icon and https:// showing a website has security encryption">HTTPS</span> on websites, and be aware of <span class="key-word" data-def="Fake emails or websites trying to steal your personal information">phishing</span> scams.`}
+    ],
+    flashcards:[
+      {front:'What is the internet?', back:'A global network connecting billions of computers and devices to share information.'},
+      {front:'What are packets?', back:'Small chunks of data that travel the internet separately and reassemble at the destination.'},
+      {front:'What is a server?', back:'A powerful computer that stores websites and sends them to your browser when requested.'},
+      {front:'What is HTTPS?', back:'A secure web protocol — the padlock icon shows the connection is encrypted and safe.'},
+      {front:'What is phishing?', back:'A scam using fake emails or websites to trick you into giving personal information.'}
+    ],
+    quiz:[
+      {q:'What is the internet?',
+       options:['A type of computer','A single powerful server','A global network connecting billions of devices','Only web pages and emails'],
+       answer:2, explanation:'The internet is a massive worldwide network connecting billions of computers and devices.'},
+      {q:'What are data "packets"?',
+       options:['Physical envelopes','Small chunks of data that travel the network separately','Passwords','Server files'],
+       answer:1, explanation:'Data is broken into small packets that each find their own route, then reassemble at the destination.'},
+      {q:'What does HTTPS tell you about a website?',
+       options:['It is slow','It is free','It is encrypted and secure','It was made in America'],
+       answer:2, explanation:'HTTPS (with a padlock icon) means the connection is encrypted — your data is protected.'},
+      {q:'What is phishing?',
+       options:['A type of online game','Tricking people into giving personal info via fake emails/sites','A search engine','A type of router'],
+       answer:1, explanation:'Phishing uses fake emails and websites to steal passwords, bank details or personal information.'}
+    ]
+  },
+
+  algorithms:{
+    title:'Algorithms & Logic', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'⚙️ What is an Algorithm?',
+       text:`An <span class="key-word" data-def="A step-by-step set of instructions to solve a problem or complete a task">algorithm</span> is a set of instructions to solve a problem. You follow algorithms every day! A recipe is an algorithm. A morning routine is an algorithm. Computers need very precise algorithms.`,
+       visual:{icon:'📋✅🔢', caption:'Algorithms are step-by-step recipes for solving problems'}},
+      {type:'key', heading:'🔀 Logic and Conditions',
+       text:`Computers make decisions using <span class="key-word" data-def="Logical statements that check if something is true or false — if-then-else">if-then-else</span> statements. Example: IF the light is red → STOP. ELSE → GO. This is <span class="key-word" data-def="A type of thinking that uses clear rules and reasoning to solve problems">logical thinking</span>.`,
+       note:'🤔 Programmers call this "conditional logic" — it\'s the foundation of all computer programs!'},
+      {type:'visual', heading:'🔄 Loops',
+       text:`A <span class="key-word" data-def="A programming instruction that repeats a set of steps multiple times">loop</span> repeats instructions until a condition is met. Like "brush each tooth" — you repeat for every tooth. <span class="key-word" data-def="A loop that repeats while a condition remains true">While loops</span> and <span class="key-word" data-def="A loop that repeats a fixed number of times">for loops</span> are common in code.`,
+       visual:{icon:'🔄🔄🔄', caption:'Loops repeat steps automatically — no need to write them out again and again'}},
+      {type:'text', heading:'🧩 Decomposition',
+       text:`<span class="key-word" data-def="Breaking a big problem down into smaller, manageable steps">Decomposition</span> is the art of breaking big problems into smaller pieces. Great programmers think: "How can I break this into smaller steps?" This makes hard problems solvable.`}
+    ],
+    flashcards:[
+      {front:'What is an algorithm?', back:'A step-by-step set of instructions to solve a problem or complete a task.'},
+      {front:'What is an "if-then-else" statement?', back:'A condition: IF something is true → do this. ELSE → do something different.'},
+      {front:'What is a loop in programming?', back:'A set of instructions that repeats until a condition is met.'},
+      {front:'What is decomposition?', back:'Breaking a big problem into smaller, easier pieces to solve step by step.'},
+      {front:'Give an everyday example of an algorithm', back:'A recipe, morning routine, or instructions for playing a board game!'}
+    ],
+    quiz:[
+      {q:'What is an algorithm?',
+       options:['A type of computer','Step-by-step instructions to solve a problem','A programming language','A type of memory'],
+       answer:1, explanation:'An algorithm is a clear, step-by-step set of instructions for solving a problem.'},
+      {q:'What does an "if-then-else" statement do?',
+       options:['Repeats a step many times','Stores data permanently','Makes a decision based on whether a condition is true or false','Displays images'],
+       answer:2, explanation:'If-then-else checks a condition: IF true → do action A. ELSE → do action B.'},
+      {q:'What is a loop in programming?',
+       options:['A type of error','Instructions that repeat until a condition is met','A way to display text','A type of password'],
+       answer:1, explanation:'Loops repeat a set of instructions multiple times — very useful for repetitive tasks!'},
+      {q:'What is decomposition?',
+       options:['When code breaks down','Breaking a problem into smaller, manageable pieces','A type of loop','When data is deleted'],
+       answer:1, explanation:'Decomposition means breaking a complex problem into smaller parts that are easier to solve.'}
+    ]
+  },
+
+  /* ---- GEOGRAPHY ---- */
+  continents:{
+    title:'World Continents', readTime:'8 min',
+    chunks:[
+      {type:'intro', heading:'🌍 The 7 Continents',
+       text:`Earth is divided into 7 large <span class="key-word" data-def="One of the 7 main large landmasses on Earth">continents</span>: <strong>Asia, Africa, North America, South America, Antarctica, Europe</strong> and <strong>Australia/Oceania</strong>. They were once joined in a single supercontinent called <span class="key-word" data-def="The ancient supercontinent that broke apart into today's continents about 175 million years ago">Pangaea</span>.`,
+       visual:{icon:'🌍🌎🌏', caption:'All 7 continents — home to 8 billion humans (and countless animals!)'}},
+      {type:'key', heading:'🏆 Biggest & Smallest',
+       text:`<span class="key-word" data-def="The largest continent — covers about 30% of Earth's land, home to 4.7 billion people">Asia</span> is the largest continent. <span class="key-word" data-def="The smallest continent — the island continent, home to kangaroos and koalas">Australia</span> is the smallest. <span class="key-word" data-def="The second largest continent by area — home to more countries than any other continent">Africa</span> has the most countries (54). <span class="key-word" data-def="The frozen continent covering the South Pole — has no permanent human residents">Antarctica</span> has no permanent population.`,
+       note:'🧊 Antarctica is actually a desert! It gets very little rainfall — just frozen.'},
+      {type:'visual', heading:'🌊 Oceans Between Continents',
+       text:`The 5 oceans: <strong>Pacific</strong> (largest), <strong>Atlantic</strong>, <strong>Indian</strong>, <strong>Southern</strong>, and <strong>Arctic</strong> (smallest, frozen). Oceans separate continents and regulate Earth's climate.`,
+       visual:{icon:'🌊🐳🚢', caption:'The Pacific Ocean alone is bigger than all land on Earth combined!'}},
+      {type:'text', heading:'👥 Population by Continent',
+       text:`<span class="key-word" data-def="Asia contains about 60% of the world's entire human population">Asia</span> has the most people (~4.7 billion). <span class="key-word" data-def="Africa is the fastest-growing continent by population">Africa</span> is growing fastest. <span class="key-word" data-def="Oceania (Australia + Pacific Islands) has the smallest population of any inhabited continent">Oceania</span> has the smallest population of inhabited continents.`}
+    ],
+    flashcards:[
+      {front:'Name all 7 continents', back:'Asia, Africa, North America, South America, Antarctica, Europe, Australia/Oceania.'},
+      {front:'Which is the largest continent?', back:'Asia — about 30% of Earth\'s land, home to 4.7 billion people.'},
+      {front:'Which continent has the most countries?', back:'Africa — with 54 countries, more than any other continent.'},
+      {front:'What was Pangaea?', back:'The ancient supercontinent — all today\'s continents were once joined together as one.'},
+      {front:'Which is the largest ocean?', back:'The Pacific Ocean — bigger than all land on Earth combined!'}
+    ],
+    quiz:[
+      {q:'How many continents are there on Earth?',
+       options:['5','6','7','8'],
+       answer:2, explanation:'There are 7 continents: Asia, Africa, North/South America, Antarctica, Europe, Australia.'},
+      {q:'Which is the largest continent?',
+       options:['Africa','North America','Europe','Asia'],
+       answer:3, explanation:'Asia is the largest continent, covering about 30% of Earth\'s land area.'},
+      {q:'Which continent has no permanent human population?',
+       options:['Arctic','Greenland','Antarctica','Sahara'],
+       answer:2, explanation:'Antarctica is covered in ice and has no permanent residents — only scientists visiting temporarily.'},
+      {q:'What was Pangaea?',
+       options:['An ancient ocean','A type of climate','The supercontinent all landmasses once formed','A type of mountain'],
+       answer:2, explanation:'Pangaea was the single supercontinent about 175 million years ago, before it broke apart.'}
+    ]
+  },
+
+  climate:{
+    title:'Climate & Weather', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'🌤️ Weather vs Climate',
+       text:`<span class="key-word" data-def="The day-to-day atmospheric conditions in a place — rain, sun, temperature, wind">Weather</span> is what happens outside today. <span class="key-word" data-def="The average weather patterns of a region over 30+ years">Climate</span> is the long-term pattern. A simple memory trick: "Climate is what you expect, weather is what you get."`,
+       visual:{icon:'☀️🌧️❄️🌪️', caption:'Weather changes daily — climate is the overall pattern over decades'}},
+      {type:'key', heading:'🌡️ Climate Zones',
+       text:`Earth has major <span class="key-word" data-def="Bands around Earth with similar climate patterns based on distance from the equator">climate zones</span>: <span class="key-word" data-def="The hot, wet zone near the equator — rainforests and jungles">Tropical</span> (hot & wet), <span class="key-word" data-def="The dry zone between tropical and temperate — includes most deserts">Arid/Desert</span>, <span class="key-word" data-def="Moderate zone with four seasons — most of Europe and USA">Temperate</span> (four seasons), and <span class="key-word" data-def="The cold zones near the poles — permanently frozen">Polar</span> (freezing).`,
+       note:'🌡️ The hottest recorded temperature was 56.7°C in Death Valley, USA!'},
+      {type:'visual', heading:'🌊 Climate Change',
+       text:`<span class="key-word" data-def="The long-term shift in global temperatures and weather patterns, mainly caused by human activities burning fossil fuels">Climate change</span> refers to global warming caused by <span class="key-word" data-def="Gases like CO₂ and methane that trap heat in Earth's atmosphere">greenhouse gases</span>. The Earth's average temperature has risen about 1.1°C since the Industrial Revolution.`,
+       visual:{icon:'🌡️📈🌍', caption:'Global average temperatures have been rising since industrialisation'}},
+      {type:'text', heading:'🌬️ What Causes Weather?',
+       text:`Weather is caused by <span class="key-word" data-def="A large mass of air with similar temperature and humidity, covering thousands of kilometres">air masses</span> moving around Earth. When warm and cold air masses meet, they create <span class="key-word" data-def="The boundary between two air masses with different temperatures — causes rain, wind and storms">fronts</span> which cause rain and storms.`}
+    ],
+    flashcards:[
+      {front:'Difference between weather and climate?', back:'Weather = today\'s conditions. Climate = average pattern over 30+ years.'},
+      {front:'Name 4 climate zones', back:'Tropical (hot/wet), Arid/Desert (dry), Temperate (4 seasons), Polar (freezing).'},
+      {front:'What causes climate change?', back:'Burning fossil fuels releases greenhouse gases (CO₂, methane) that trap heat in the atmosphere.'},
+      {front:'What is a weather front?', back:'A boundary between warm and cold air masses — usually causes rain, wind and storms.'},
+      {front:'Which climate zone has 4 seasons?', back:'Temperate zones — like most of Europe, USA, China — have spring, summer, autumn and winter.'}
+    ],
+    quiz:[
+      {q:'What is the difference between weather and climate?',
+       options:['They are the same thing','Weather is daily, climate is long-term patterns (30+ years)','Climate is measured daily','Weather is only rain'],
+       answer:1, explanation:'"Climate is what you expect, weather is what you get" — climate is the long-term average.'},
+      {q:'Which climate zone is hot and wet?',
+       options:['Polar','Temperate','Arid/Desert','Tropical'],
+       answer:3, explanation:'Tropical zones near the equator get intense sun year-round and heavy rainfall — supporting rainforests.'},
+      {q:'What mainly causes climate change?',
+       options:['Volcanoes alone','Natural cycles only','Burning fossil fuels releasing greenhouse gases','The Moon\'s gravity'],
+       answer:2, explanation:'Human burning of coal, oil and gas releases CO₂ and other greenhouse gases that trap heat.'},
+      {q:'What is a weather front?',
+       options:['The front page of a weather report','The boundary between warm and cold air masses','A type of thermometer','A season'],
+       answer:1, explanation:'A front is where warm and cold air masses meet — this collision causes rain, wind and storms.'}
+    ]
+  },
+
+  maps:{
+    title:'Reading Maps', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'🗺️ What is a Map?',
+       text:`A <span class="key-word" data-def="A scaled-down representation of an area drawn from above, showing features like roads, rivers and mountains">map</span> is a drawing that represents a real place from above. Maps help us navigate, understand geography, and plan journeys. Different types of maps serve different purposes.`,
+       visual:{icon:'🗺️🧭📍', caption:'Maps turn the real world into something we can read and understand'}},
+      {type:'key', heading:'🧭 Key Map Elements',
+       text:`Every good map has: a <span class="key-word" data-def="A direction indicator showing North, South, East and West on a map">compass rose</span> (showing N/S/E/W), a <span class="key-word" data-def="A legend explaining what each symbol or colour means on a map">key/legend</span> (explains symbols), a <span class="key-word" data-def="A ratio showing how much real distance equals how much distance on the map — e.g., 1cm=1km">scale</span> (shows real distances), and a <span class="key-word" data-def="The name of the map explaining what area it shows">title</span>.`,
+       note:'🧭 A compass needle points to magnetic north — slightly different from true north!'},
+      {type:'visual', heading:'📍 Types of Maps',
+       text:`<strong>Physical maps</strong> show natural features (mountains, rivers). <strong>Political maps</strong> show countries and borders. <strong>Road maps</strong> show routes and cities. <strong>Topographic maps</strong> show elevation with <span class="key-word" data-def="Lines on a map connecting points of equal elevation/height above sea level">contour lines</span>.`,
+       visual:{icon:'🏔️🛣️🌊📍', caption:'Different map types show different information about the same place'}},
+      {type:'text', heading:'🌐 Latitude and Longitude',
+       text:`<span class="key-word" data-def="Horizontal lines on a globe measuring distance north or south of the equator (0°)">Latitude</span> lines run east-west and measure north-south position. <span class="key-word" data-def="Vertical lines measuring distance east or west of the Prime Meridian (0°) in Greenwich">Longitude</span> lines run north-south and measure east-west. Together, they give every point on Earth a unique address!`}
+    ],
+    flashcards:[
+      {front:'What are the 4 key elements of a map?', back:'Compass rose (direction), Key/Legend (symbols), Scale (distance), and Title.'},
+      {front:'What is a scale on a map?', back:'A ratio showing how map distance relates to real distance — e.g., 1cm = 1km.'},
+      {front:'What is latitude?', back:'Horizontal lines measuring how far north or south a point is from the equator.'},
+      {front:'What is longitude?', back:'Vertical lines measuring how far east or west a point is from the Prime Meridian.'},
+      {front:'What does a legend/key tell you?', back:'What each symbol or colour on the map means.'}
+    ],
+    quiz:[
+      {q:'What does a map\'s scale tell you?',
+       options:['What country it shows','The height of mountains','The ratio of map distance to real distance','When it was made'],
+       answer:2, explanation:'The scale (e.g., 1cm=1km) tells you how to convert map distances to real-world distances.'},
+      {q:'What does a compass rose show?',
+       options:['A type of flower','The map\'s author','Directions: North, South, East, West','The elevation'],
+       answer:2, explanation:'A compass rose is a symbol showing the cardinal directions (N, S, E, W) on a map.'},
+      {q:'What are latitude lines?',
+       options:['Vertical lines measuring east-west position','Lines showing elevation','Horizontal lines measuring north-south position from equator','Lines showing rainfall'],
+       answer:2, explanation:'Latitude lines run horizontally and measure how far north or south a place is from the equator.'},
+      {q:'What type of map shows countries and their borders?',
+       options:['Physical map','Road map','Topographic map','Political map'],
+       answer:3, explanation:'Political maps show countries, capitals, and borders between nations.'}
+    ]
+  },
+
+  /* ---- GENERAL ---- */
+  'life-skills':{
+    title:'Life Skills & Etiquette', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'🌟 What are Life Skills?',
+       text:`<span class="key-word" data-def="Practical abilities needed to navigate everyday life successfully — communication, problem-solving, respect">Life skills</span> are the essential abilities needed to live well and work with others. They include communication, time management, empathy, and basic manners (<span class="key-word" data-def="Polite and respectful behaviour in social situations">etiquette</span>).`,
+       visual:{icon:'🤝💬⏰🎯', caption:'Life skills help you succeed at school, work and in relationships'}},
+      {type:'key', heading:'💬 Communication Skills',
+       text:`Good communication means: <span class="key-word" data-def="Paying full attention to what someone is saying, not just waiting for your turn to speak">active listening</span>, speaking clearly, asking good questions, and <span class="key-word" data-def="Being able to understand and share the feelings of another person">empathy</span>. Non-verbal communication (body language, eye contact) is also very important.`,
+       note:'👁️ Research shows 55% of communication is body language, 38% is tone, only 7% is words!'},
+      {type:'visual', heading:'⏰ Time Management',
+       text:`Managing time means: setting <span class="key-word" data-def="Deciding what is most important and needs to be done first">priorities</span>, avoiding <span class="key-word" data-def="Delaying tasks you need to do by doing less important things instead">procrastination</span>, breaking tasks into small steps, and building good daily routines.`,
+       visual:{icon:'⏰📅✅', caption:'Planning your time makes you less stressed and more successful'}},
+      {type:'text', heading:'🤝 Respect and Etiquette',
+       text:`Basic etiquette includes: saying please and thank you, being on time, listening when others speak, treating people with <span class="key-word" data-def="Treating people with consideration for their feelings and rights">respect</span>, and being honest. These small habits build strong, lasting relationships.`}
+    ],
+    flashcards:[
+      {front:'What is active listening?', back:'Paying full attention to what someone says — not just waiting for your turn to speak.'},
+      {front:'What is empathy?', back:'Understanding and sharing the feelings of another person.'},
+      {front:'What is time management?', back:'Organising your time wisely — setting priorities, avoiding procrastination, building routines.'},
+      {front:'What is procrastination?', back:'Delaying tasks by doing less important things instead.'},
+      {front:'Name 3 examples of etiquette', back:'Saying please/thank you, being on time, listening when others speak — many more exist!'}
+    ],
+    quiz:[
+      {q:'What is active listening?',
+       options:['Talking loudly','Looking at your phone while someone talks','Paying full attention to what someone says','Repeating everything word for word'],
+       answer:2, explanation:'Active listening means fully concentrating on the speaker — maintaining eye contact and not interrupting.'},
+      {q:'What is empathy?',
+       options:['Feeling sorry for yourself','Understanding and sharing another person\'s feelings','A type of math','Being very smart'],
+       answer:1, explanation:'Empathy is the ability to understand and share the feelings of another person.'},
+      {q:'What is procrastination?',
+       options:['Finishing tasks early','Delegating work to others','Delaying important tasks by doing unimportant ones instead','Taking too many breaks'],
+       answer:2, explanation:'Procrastination is when you put off important tasks (e.g., homework) by doing fun or easier things instead.'},
+      {q:'What percentage of communication is body language, according to research?',
+       options:['7%','38%','55%','80%'],
+       answer:2, explanation:'Research (Mehrabian) suggests 55% of communication is body language, 38% tone, only 7% actual words.'}
+    ]
+  },
+
+  'critical-thinking':{
+    title:'Critical Thinking', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'🧠 What is Critical Thinking?',
+       text:`<span class="key-word" data-def="The ability to analyse information objectively and make reasoned judgements rather than accepting things blindly">Critical thinking</span> is thinking clearly and carefully before believing or deciding something. It means asking "how do I know this?" and "what's the evidence?"`,
+       visual:{icon:'🧠❓🔍⚖️', caption:'Critical thinkers question, analyse and reason before concluding'}},
+      {type:'key', heading:'🔍 The 5 Critical Thinking Steps',
+       text:`1. <span class="key-word" data-def="Clearly define what question or problem you are trying to solve">Identify the question</span>. 2. <span class="key-word" data-def="Find reliable facts and data from credible sources">Gather evidence</span>. 3. <span class="key-word" data-def="Consider whether the evidence is reliable and the reasoning is valid">Evaluate it</span>. 4. <span class="key-word" data-def="Think about all sides of the issue fairly">Consider other viewpoints</span>. 5. <span class="key-word" data-def="Form a conclusion based on the evidence you've analysed">Draw a conclusion</span>.`,
+       note:'❗ Misinformation spreads fast online — critical thinking helps you spot fake news!'},
+      {type:'visual', heading:'⚖️ Bias and Fallacies',
+       text:`A <span class="key-word" data-def="A tendency to favour certain information because of personal preferences, not evidence">bias</span> is a mental shortcut that skews our thinking. A <span class="key-word" data-def="An error in reasoning that makes an argument logically invalid">logical fallacy</span> is a faulty argument. Example: "Everyone believes X" is not evidence X is true.`,
+       visual:{icon:'⚖️🧩🔎', caption:'Spotting bias and fallacies helps you think more clearly'}},
+      {type:'text', heading:'💡 Why It Matters',
+       text:`Critical thinking helps you: make better decisions, avoid <span class="key-word" data-def="False information spread deliberately or accidentally">misinformation</span>, solve problems creatively, and understand multiple perspectives. It's one of the most valued skills in the 21st century.`}
+    ],
+    flashcards:[
+      {front:'What is critical thinking?', back:'Analysing information objectively and reasoning carefully before forming beliefs or decisions.'},
+      {front:'What is a bias?', back:'A tendency to favour certain information due to personal preferences rather than evidence.'},
+      {front:'What is a logical fallacy?', back:'An error in reasoning that makes an argument logically invalid.'},
+      {front:'Name the 5 steps of critical thinking', back:'1.Identify question 2.Gather evidence 3.Evaluate it 4.Consider viewpoints 5.Draw conclusion'},
+      {front:'Why is critical thinking important today?', back:'To avoid misinformation, make better decisions, and understand complex issues.'}
+    ],
+    quiz:[
+      {q:'What is critical thinking?',
+       options:['Memorising facts','Blindly trusting authority','Analysing information and reasoning carefully before concluding','Thinking very fast'],
+       answer:2, explanation:'Critical thinking means questioning, evaluating evidence, and reasoning carefully before forming an opinion.'},
+      {q:'What is a bias?',
+       options:['A type of evidence','A fair way of thinking','A tendency to favour information based on personal preferences not evidence','A logical argument'],
+       answer:2, explanation:'Bias is a mental shortcut that makes us favour certain information — often unconsciously.'},
+      {q:'What should you do FIRST when thinking critically about a claim?',
+       options:['Share it on social media','Accept it if it sounds right','Clearly identify what question or problem is being addressed','Form a conclusion immediately'],
+       answer:2, explanation:'The first step is clearly identifying the question — without this, your analysis will be unfocused.'},
+      {q:'Why is critical thinking especially important with online information?',
+       options:['Because the internet is slow','Because online content is always true','Because misinformation spreads fast online and can mislead people','Because computers can\'t think'],
+       answer:2, explanation:'The internet spreads false information very quickly — critical thinking helps you verify what\'s real.'}
+    ]
+  },
+
+  health:{
+    title:'Health & Wellness', readTime:'7 min',
+    chunks:[
+      {type:'intro', heading:'💪 What is Health?',
+       text:`<span class="key-word" data-def="A state of complete physical, mental and social wellbeing — not just the absence of disease">Health</span> is much more than not being sick. The World Health Organization defines it as complete physical, <span class="key-word" data-def="Your emotional and psychological wellbeing — how you think, feel and cope with life">mental</span>, and social wellbeing.`,
+       visual:{icon:'💪🧠🤝', caption:'Health has three dimensions: body, mind, and social connections'}},
+      {type:'key', heading:'🥦 Physical Health',
+       text:`Physical health involves: regular <span class="key-word" data-def="Bodily activity that requires effort and improves fitness — at least 60 min/day for children">exercise</span>, a <span class="key-word" data-def="Eating a variety of foods in the right amounts — fruits, vegetables, protein, grains, dairy">balanced diet</span>, enough <span class="key-word" data-def="The rest state when your body repairs and grows — children need 9-11 hours per night">sleep</span>, good <span class="key-word" data-def="Practices that keep your body clean and prevent disease — washing hands, brushing teeth">hygiene</span>, and avoiding harmful substances.`,
+       note:'🛌 Sleep is when your brain processes memories and your body repairs itself!'},
+      {type:'visual', heading:'🧠 Mental Health',
+       text:`Mental health includes: managing <span class="key-word" data-def="Feeling overwhelmed — chronic stress harms both body and mind">stress</span>, building <span class="key-word" data-def="The ability to recover and bounce back from difficulties">resilience</span>, having meaningful <span class="key-word" data-def="Supportive connections with family, friends and community">social connections</span>, and getting help when needed. Mental health is just as important as physical health.`,
+       visual:{icon:'🧘💬🌸', caption:'Mental wellbeing: manage stress, stay connected, seek help when needed'}},
+      {type:'text', heading:'🌱 Healthy Habits',
+       text:`Daily healthy habits: drink 6-8 glasses of <span class="key-word" data-def="Water makes up 60% of your body — essential for every body function">water</span>, eat 5 portions of <span class="key-word" data-def="Fresh fruits and vegetables containing vitamins, minerals and fibre">fruit and vegetables</span>, move your body, limit screen time, spend time outdoors, and nurture friendships.`}
+    ],
+    flashcards:[
+      {front:'What is the WHO definition of health?', back:'Complete physical, mental and social wellbeing — not just the absence of disease.'},
+      {front:'How many hours of sleep do children need?', back:'9 to 11 hours per night — sleep is essential for brain development and body repair.'},
+      {front:'What is a balanced diet?', back:'Eating a variety of foods: fruits, vegetables, protein, grains and dairy in the right amounts.'},
+      {front:'What is mental health?', back:'Your emotional and psychological wellbeing — how you think, feel and cope with challenges.'},
+      {front:'Name 3 daily healthy habits', back:'Drink 8 glasses of water, eat 5 fruit/veg, exercise 60 min, sleep 9-11 hours — any 3!'}
+    ],
+    quiz:[
+      {q:'According to WHO, what is health?',
+       options:['Not having any disease','Complete physical, mental and social wellbeing','Being very fit and strong','Only eating healthy food'],
+       answer:1, explanation:'The WHO defines health as "complete physical, mental and social wellbeing" — not just absence of disease.'},
+      {q:'How many hours of sleep do children need each night?',
+       options:['5-6 hours','7-8 hours','9-11 hours','12-14 hours'],
+       answer:2, explanation:'Children (6-13) need 9-11 hours of sleep for brain development, memory and growth.'},
+      {q:'What is resilience?',
+       options:['Being very strong physically','The ability to bounce back and recover from difficulties','Never feeling sad','Having lots of friends'],
+       answer:1, explanation:'Resilience is the ability to recover and adapt when faced with challenges, adversity or setbacks.'},
+      {q:'Which of these is a physical health practice?',
+       options:['Watching TV all day','Eating only sweets','Drinking 6-8 glasses of water daily','Avoiding all exercise'],
+       answer:2, explanation:'Drinking 6-8 glasses of water daily is essential for nearly every body function — a great health habit!'}
+    ]
+  }
+};
+
+/* Fallback lesson generator */
+function makeDefaultLesson(subject, chapter) {
+  return {
+    title: chapter.title,
+    readTime: '6 min',
+    chunks:[
+      {type:'intro', heading:`📖 Welcome to ${chapter.title}`,
+       text:`In this lesson, you will explore <span class="key-word" data-def="The main focus of this chapter">${chapter.title}</span> as part of ${subject.title}. This lesson is designed to be easy to follow and understand.`,
+       visual:{icon:subject.icon, caption:`${subject.title}: ${chapter.title}`}},
+      {type:'key', heading:'🔑 Core Concepts',
+       text:`This chapter introduces the key ideas of ${chapter.title}. Look out for the highlighted words — click them to see their definitions! Learning is easier when you understand the vocabulary.`,
+       note:`💡 Pro tip: Use the flashcards after reading to test your memory!`},
+      {type:'text', heading:'📌 What You Will Learn',
+       text:`By the end you will understand the core ideas, answer quiz questions with confidence, and feel good about this topic. Take your time — there is no rush here.`}
+    ],
+    flashcards:[
+      {front:`What is the main topic?`, back:chapter.title},
+      {front:`Which subject is this?`, back:subject.title},
+      {front:`Why learn ${chapter.title}?`, back:`It builds your understanding of ${subject.title} — a core part of your education.`},
+      {front:`What should you do after reading?`, back:'Take the quiz to test what you have learned!'}
+    ],
+    quiz:[
+      {q:`Which subject does "${chapter.title}" belong to?`,
+       options:[subject.title,'Art','Music','Physical Education'],
+       answer:0, explanation:`${chapter.title} is part of ${subject.title}!`},
+      {q:`Why is it useful to learn about ${chapter.title}?`,
+       options:['It is not useful',`It builds knowledge of ${subject.title}`,'Only teachers need to know','It is very hard'],
+       answer:1, explanation:`Understanding ${chapter.title} strengthens your ${subject.title} knowledge.`},
+      {q:'What should you do if you find a highlighted word difficult?',
+       options:['Ignore it','Skip to the next page','Click it to see the definition','Ask someone else'],
+       answer:2, explanation:'Clicking highlighted words shows their definition — great for building vocabulary!'},
+      {q:'What helps you remember what you read?',
+       options:['Reading once very fast','Never practising','Using flashcards and quizzes','Skipping lessons'],
+       answer:2, explanation:'Flashcards and quizzes use active recall — the most powerful way to remember information!'}
+    ]
+  };
+}
+
+/* ======================================================
+   STATE
+====================================================== */
+let state = {
+  currentMode:'default', xp:0, lessonsCompleted:0, quizzesCorrect:0,
+  streak:0, lastStudyDate:'', ttsEnabled:false, wordDefEnabled:true,
+  voiceGuideEnabled:false, chunkMode:true, pomoDuration:25,
+  focusMode:false, chunkIndex:0, lessonData:null, flashcardIndex:0,
+  currentSubject:null, currentChapter:null, currentChapterIndex:0,
+  pomoSecondsLeft:25*60, pomoSessions:0, pomoRunning:false,
+  isSpeaking:false, quizAnswers:{}, quizTotal:0,
+  pomoTimerID: null
+};
+
+/* Load state */
+try { Object.assign(state, JSON.parse(localStorage.getItem('nl_state')||'{}')); } catch(e){}
+
+/* Fix streak on load */
+(function checkStreak(){
+  const today = new Date().toDateString();
+  if (state.lastStudyDate !== today) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate()-1);
+    if (state.lastStudyDate !== yesterday.toDateString()) {
+      if (state.lastStudyDate) state.streak = 0; // broke streak
+    }
+  }
+})();
+
+function saveState(){
+  const s = {...state};
+  delete s.lessonData; delete s.quizAnswers; delete s.pomoTimerID;
+  localStorage.setItem('nl_state', JSON.stringify(s));
+}
+
+function updateStreakUI(){
+  document.getElementById('streakNum').textContent = state.streak;
+  const ds = document.getElementById('stat-streak');
+  if(ds) ds.textContent = state.streak;
+}
+
+/* ======================================================
+   PAGE MANAGEMENT
+====================================================== */
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(name==='subjects') renderSubjects();
+  if(name==='dashboard') renderDashboard();
+  if(name==='settings') syncSettings();
+  const lessonActive = name==='lesson';
+  document.getElementById('ttsBar').style.display = (lessonActive && state.ttsEnabled) ? 'flex' : 'none';
+}
+
+function setActive(btn){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ======================================================
+   MODE SYSTEM — FIX: visually distinct + mode strip
+====================================================== */
+function applyMode(mode){
+  const body = document.body;
+  body.className = body.className.replace(/mode-\S+/g,'').trim();
+  if(mode && mode!=='default') body.classList.add('mode-'+mode);
+  state.currentMode = mode;
+  const ms = document.getElementById('modeSelect');
+  if(ms) ms.value = mode;
+  if(state.voiceGuideEnabled){
+    const msgs={adhd:'ADHD mode. Clean blue focus layout enabled.',
+      dyslexia:'Dyslexia mode. Warm background with Atkinson Hyperlegible font.',
+      autism:'Autism mode. Calm green, consistent and predictable layout.',
+      visual:'Visual mode. Dark purple with rich visual emphasis.',
+      calm:'Calm mode. Soft sage greens for relaxed pacing.',
+      highcontrast:'High contrast mode. Black background with gold text.'};
+    if(msgs[mode]) voiceGuide(msgs[mode]);
+  }
+  saveState();
+}
+
+function applyFontSize(sz){
+  document.body.classList.remove('font-large','font-xlarge');
+  if(sz) document.body.classList.add(sz);
+}
+
+/* ======================================================
+   COMFORT SELECTOR
+====================================================== */
+function selectComfort(card){
+  document.querySelectorAll('.comfort-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  state._pendingMode = card.dataset.mode;
+}
+
+function applyComfort(){
+  const mode = state._pendingMode || 'default';
+  applyMode(mode);
+  showPage('subjects');
+  setActive(document.querySelectorAll('.nav-btn')[1]);
+  showReward('🎉','Mode Applied!',`${mode.charAt(0).toUpperCase()+mode.slice(1)} mode is now active`);
+}
+
+/* ======================================================
+   SUBJECTS
+====================================================== */
+function renderSubjects(){
+  const grid = document.getElementById('subjectsGrid');
+  const subjectsWithSandbox = [...SUBJECTS, {
+    id:'sandbox', title:'Self Learning', icon:'🛠️',
+    desc:'Paste any text and I\'ll simplify it for your current mode',
+    color:'#E8603A', sandbox:true, chapters:[]
+  }];
+  grid.innerHTML = subjectsWithSandbox.map(s=>`
+    <div class="subject-card scroll-reveal ${s.sandbox?'sandbox-card':''}" style="--card-color:${s.color}" onclick="openSubject('${s.id}')">
+      <div class="subject-icon">${s.icon}</div>
+      <div class="subject-title">${s.title}</div>
+      <div class="subject-desc">${s.desc}</div>
+      ${s.sandbox ? `<div class="subject-tag" style="background:color-mix(in srgb,${s.color} 14%,transparent);color:${s.color}">✨ Paste & Simplify</div>`
+        : `<div class="subject-tag">📖 ${s.chapters.length} chapters</div>`}
+    </div>
+  `).join('');
+  setTimeout(()=>{
+    document.querySelectorAll('.scroll-reveal').forEach((el,i)=>{
+      setTimeout(()=>el.classList.add('visible'),i*70);
+    });
+  },40);
+}
+
+function openSubject(id){
+  if(id==='sandbox'){openSandbox();return;}
+  const subject = SUBJECTS.find(s=>s.id===id);
+  if(!subject) return;
+  state.currentSubject = subject;
+  openChapter(subject,0);
+}
+
+/* ======================================================
+   SANDBOX — Self Learning
+====================================================== */
+function openSandbox(){
+  showPage('lesson');
+  setActive(document.querySelectorAll('.nav-btn')[1]);
+  document.getElementById('lessonSidebar').innerHTML = `
+    <div style="padding:12px 8px;"><span style="font-size:24px;">🛠️</span>
+    <strong style="font-size:14px;display:block;margin-top:4px;">Self Learning</strong>
+    <p style="font-size:12px;color:var(--text-muted);margin-top:6px;">Paste your text and get it simplified for ${state.currentMode} mode!</p></div>`;
+
+  document.getElementById('lessonContent').innerHTML = `
+    <div style="max-width:760px;">
+      <div style="margin-bottom:16px;">
+        <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px;font-family:var(--font-body);" onclick="showPage('subjects');setActive(document.querySelectorAll('.nav-btn')[1])">← Back to Subjects</button>
+      </div>
+      <div class="sandbox-area">
+        <h3>🛠️ Self Learning Sandbox</h3>
+        <p class="desc">Paste any complex text below. I'll break it down into simple, neurodivergent-friendly chunks based on your current mode: <strong>${state.currentMode.charAt(0).toUpperCase()+state.currentMode.slice(1)}</strong>.</p>
+        <textarea class="sandbox-textarea" id="sandboxInput" placeholder="Paste any text here — textbook paragraph, news article, instructions, anything..."></textarea>
+        <button class="simplify-btn" onclick="simplifyText()">✨ Simplify for Me</button>
+      </div>
+      <div class="simplified-output" id="simplifiedOutput"></div>
+    </div>
+  `;
+}
+
+function simplifyText(){
+  const text = document.getElementById('sandboxInput').value.trim();
+  if(!text){ alert('Please paste some text first!'); return; }
+
+  const output = document.getElementById('simplifiedOutput');
+  output.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted);">✨ Simplifying your text...</div>';
+  output.classList.add('show');
+
+  setTimeout(()=>{
+    // Split into sentences
+    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+    const mode = state.currentMode;
+
+    // Mode-specific transformations
+    let chunks = [];
+    if(mode==='adhd'){
+      // Short bullets, high contrast
+      chunks = sentences.map((s,i)=>({label:`Point ${i+1}`, text:`• ${s.trim()}`}));
+    } else if(mode==='dyslexia'){
+      // Short sentences, spaced out
+      chunks = sentences.map((s,i)=>({label:`Section ${i+1}`, text:s.trim()}));
+    } else if(mode==='visual'){
+      // Add emojis
+      const emojis=['💡','🔑','📌','🎯','⭐','🔍','📚','🧩'];
+      chunks = sentences.map((s,i)=>({label:`${emojis[i%emojis.length]} Part ${i+1}`, text:s.trim()}));
+    } else if(mode==='autism'){
+      // Very clear numbered steps
+      chunks = sentences.map((s,i)=>({label:`Step ${i+1}`, text:s.trim()}));
+    } else if(mode==='calm'){
+      // Calm gentle phrasing
+      chunks = sentences.map((s,i)=>({label:`✦ Part ${i+1}`, text:s.trim()}));
+    } else {
+      chunks = sentences.map((s,i)=>({label:`Part ${i+1}`, text:s.trim()}));
+    }
+
+    output.innerHTML = `
+      <div style="font-weight:800;font-size:14px;margin-bottom:14px;color:var(--accent);">✅ Simplified into ${chunks.length} clear parts (${mode} mode):</div>
+      ${chunks.map(c=>`
+        <div class="simplified-block">
+          <div class="part-label">${c.label}</div>
+          <div class="part-text">${c.text}</div>
+          <button class="read-chip" onclick="voiceGuide(\`${c.text.replace(/`/g,"'")}\`)" style="margin-top:8px;">🔊 Read aloud</button>
+        </div>
+      `).join('')}
+      <div style="text-align:center;margin-top:16px;">
+        <button class="apply-btn" onclick="document.getElementById('sandboxInput').value='';document.getElementById('simplifiedOutput').innerHTML='';document.getElementById('simplifiedOutput').classList.remove('show');">↺ Try another text</button>
+      </div>
+    `;
+    addXP(15);
+  }, 800);
+}
+
+/* ======================================================
+   CHAPTERS
+====================================================== */
+function openChapter(subject, idx){
+  state.currentChapterIndex = idx;
+  const chapter = subject.chapters[idx];
+  state.currentChapter = chapter;
+  const lessonData = LESSONS[chapter.id] || makeDefaultLesson(subject, chapter);
+  showPage('lesson');
+  setActive(document.querySelectorAll('.nav-btn')[1]);
+  renderSidebar(subject, idx);
+  renderLesson(subject, chapter, lessonData);
+}
+
+function renderSidebar(subject, activeIdx){
+  document.getElementById('lessonSidebar').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;padding:6px 8px 16px;">
+      <span style="font-size:22px;">${subject.icon}</span>
+      <strong style="font-size:14px;">${subject.title}</strong>
+    </div>
+  `+subject.chapters.map((ch,i)=>`
+    <div class="chapter-item ${i===activeIdx?'active':''} ${ch.done?'done':''}" onclick="openChapter(state.currentSubject,${i})">
+      <div class="check-circle">${ch.done?'✓':(i+1)}</div>
+      <span>${ch.title}</span>
+    </div>
+  `).join('');
+}
+
+/* ======================================================
+   LESSON RENDER
+====================================================== */
+function renderLesson(subject, chapter, lessonData){
+  state.chunkIndex = 0;
+  state.lessonData = lessonData;
+  state.flashcardIndex = 0;
+
+  const done = subject.chapters.filter(c=>c.done).length;
+  const pct = Math.round((done/subject.chapters.length)*100);
+
+  document.getElementById('lessonContent').innerHTML = `
+    <div class="xp-strip">
+      <div class="xp-icon">⭐</div>
+      <div class="xp-info">
+        <div class="xp-lbl">Your XP</div>
+        <div class="xp-bar-outer"><div class="xp-bar-inner" id="xpBar" style="width:${state.xp%100}%"></div></div>
+      </div>
+      <div class="xp-num" id="xpNum">${state.xp}</div>
+    </div>
+
+    <div class="lesson-header">
+      <div class="lesson-title-area">
+        <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px;font-family:var(--font-body);margin-bottom:8px;" onclick="showPage('subjects');setActive(document.querySelectorAll('.nav-btn')[1])">← Back to ${subject.title}</button>
+        <h2>${lessonData.title}</h2>
+        <div class="lesson-meta">
+          <span class="lesson-tag">⏱️ ${lessonData.readTime}</span>
+          <span class="lesson-tag" id="chunkInfo">Section 1 of ${lessonData.chunks.length}</span>
+        </div>
+      </div>
+      <div class="lesson-actions">
+        <button class="tool-btn" onclick="toggleTTSRead()">🔊 Listen</button>
+        <button class="tool-btn" onclick="showSection('flashcards')">🃏 Flashcards</button>
+        <button class="tool-btn" onclick="showSection('quiz')">✅ Quiz</button>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="chunkProg" style="width:${100/lessonData.chunks.length}%"></div>
+      </div>
+      <div class="progress-label" id="chunkLbl">1/${lessonData.chunks.length}</div>
+    </div>
+
+    <div id="chunkArea"></div>
+
+    <div class="chunk-nav" id="chunkNav">
+      <button class="tool-btn" id="chunkPrevBtn" style="display:none" onclick="prevChunk()">← Previous</button>
+      <button class="apply-btn" id="chunkNextBtn" onclick="nextChunk()" style="font-size:15px;padding:12px 28px;">Next Section →</button>
+    </div>
+
+    <!-- FLASHCARDS -->
+    <div id="section-flashcards" style="display:none;margin-top:32px;">
+      <div class="section-title" style="margin-bottom:14px;">🃏 Flashcards — ${lessonData.title}</div>
+      <div class="flashcard-wrap">
+        <div class="flashcard" id="flashcard" onclick="flipFlashcard()">
+          <div class="fc-face fc-front">
+            <div class="fc-lbl">Question — click to flip</div>
+            <div class="fc-text" id="fcFront"></div>
+            <div class="fc-hint">👆 Click to reveal answer</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-lbl">Answer</div>
+            <div class="fc-text" id="fcBack"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button onclick="fcNav(-1)">← Prev</button>
+        <span id="fcCounter" style="padding:8px 14px;font-size:13px;font-weight:700;color:var(--text-muted)"></span>
+        <button onclick="fcNav(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="section-quiz" style="display:none;margin-top:32px;">
+      <div class="section-title" style="margin-bottom:14px;">✅ Quiz — ${lessonData.title}</div>
+      <div id="quizArea"></div>
+      <div id="quizComplete" style="display:none;text-align:center;background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);padding:32px;margin-top:16px;">
+        <div style="font-size:52px;margin-bottom:12px;">🎉</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:8px;">Quiz Complete!</div>
+        <div id="quizScore" style="color:var(--text-muted);margin-bottom:20px;"></div>
+        <button class="apply-btn" onclick="markChapterDone()">Mark Chapter Done ✅</button>
+      </div>
+    </div>
+
+    <!-- CHAPTER COMPLETE -->
+    <div id="chapterComplete" style="display:none;margin-top:24px;">
+      <div class="chapter-complete-card">
+        <span class="big-icon">🏆</span>
+        <h3>Chapter Complete!</h3>
+        <p>You earned <strong>+50 XP</strong> for finishing this chapter!</p>
+        ${state.currentChapterIndex < subject.chapters.length-1
+          ? `<button class="apply-btn" onclick="openChapter(state.currentSubject,${state.currentChapterIndex+1})">Next Chapter →</button>`
+          : `<button class="apply-btn" onclick="showPage('subjects');setActive(document.querySelectorAll('.nav-btn')[1])">Choose Another Subject 🎓</button>`
+        }
+      </div>
+    </div>
+  `;
+
+  renderChunk(0);
+  loadFlashcards();
+}
+
+/* ======================================================
+   CHUNK RENDER — FIX: visual mode shows visuals
+====================================================== */
+function renderChunk(idx){
+  const data = state.lessonData;
+  const chunk = data.chunks[idx];
+  const area = document.getElementById('chunkArea');
+  if(!area || !chunk) return;
+
+  let html = `<div class="content-chunk ${chunk.type==='key'?'highlight':''}">`;
+  html += `<h3>${chunk.heading}</h3>`;
+  html += `<p>${chunk.text}</p>`;
+
+  // Visual card — ALWAYS show in visual mode, show if chunk has visual
+  if(chunk.visual){
+    html += `<div class="visual-card">
+      <span class="visual-icon">${chunk.visual.icon}</span>
+      <div class="visual-caption">${chunk.visual.caption}</div>
+    </div>`;
+  } else if(state.currentMode==='visual'){
+    // Generate contextual emoji visual for visual mode
+    const iconMap = {intro:'🔭🌟📖', key:'⚡🔑💡', text:'📝🔍✏️', visual:'🖼️🎨📊'};
+    html += `<div class="visual-card">
+      <span class="visual-icon">${iconMap[chunk.type]||'🌟'}</span>
+      <div class="visual-caption">Visual summary: ${chunk.heading.replace(/[^a-zA-Z0-9 ]/g,'')}</div>
+    </div>`;
+  }
+
+  if(chunk.note){
+    html += `<div class="inline-note">${chunk.note}</div>`;
+  }
+
+  html += `<button class="read-chip" onclick="voiceGuide(\`${chunk.text.replace(/<[^>]+>/g,'').replace(/`/g,"'")}\`)">🔊 Read this section</button>`;
+  html += `</div>`;
+
+  if(state.chunkMode){
+    area.innerHTML = html;
+  } else {
+    if(idx===0) area.innerHTML='';
+    area.innerHTML += html;
+  }
+
+  // Update progress
+  const pct = ((idx+1)/data.chunks.length)*100;
+  const pb = document.getElementById('chunkProg');
+  if(pb) pb.style.width = pct+'%';
+  const pl = document.getElementById('chunkLbl');
+  if(pl) pl.textContent = `${idx+1}/${data.chunks.length}`;
+  const ci = document.getElementById('chunkInfo');
+  if(ci) ci.textContent = `Section ${idx+1} of ${data.chunks.length}`;
+
+  // Nav
+  const prev = document.getElementById('chunkPrevBtn');
+  const next = document.getElementById('chunkNextBtn');
+  if(prev) prev.style.display = idx>0?'flex':'none';
+  if(next) next.textContent = idx<data.chunks.length-1?'Next Section →':'Go to Flashcards 🃏';
+
+  addXP(5);
+}
+
+function nextChunk(){
+  const data = state.lessonData;
+  if(state.chunkIndex < data.chunks.length-1){
+    state.chunkIndex++;
+    renderChunk(state.chunkIndex);
+  } else {
+    showSection('flashcards');
+  }
+}
+
+function prevChunk(){
+  if(state.chunkIndex>0){
+    state.chunkIndex--;
+    renderChunk(state.chunkIndex);
+  }
+}
+
+function showSection(sec){
+  const fs = document.getElementById('section-flashcards');
+  const qs = document.getElementById('section-quiz');
+  if(fs) fs.style.display = sec==='flashcards'?'block':'none';
+  if(qs) qs.style.display = sec==='quiz'?'block':'none';
+  if(sec==='flashcards') renderFlashcard();
+  if(sec==='quiz') loadQuiz();
+  // scroll into view
+  const el = document.getElementById('section-'+sec);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ======================================================
+   FLASHCARDS — FIX: lesson-specific questions + colour
+====================================================== */
+function loadFlashcards(){
+  state.flashcardIndex = 0;
+  renderFlashcard();
+}
+
+function renderFlashcard(){
+  const cards = state.lessonData && state.lessonData.flashcards;
+  if(!cards || !cards.length) return;
+  const idx = state.flashcardIndex;
+  const el = document.getElementById('flashcard');
+  if(!el) return;
+  el.classList.remove('flipped');
+  document.getElementById('fcFront').textContent = cards[idx].front;
+  document.getElementById('fcBack').textContent = cards[idx].back;
+  document.getElementById('fcCounter').textContent = `${idx+1} / ${cards.length}`;
+}
+
+function flipFlashcard(){
+  const el = document.getElementById('flashcard');
+  if(!el) return;
+  el.classList.toggle('flipped');
+  if(el.classList.contains('flipped')) addXP(2);
+}
+
+function fcNav(dir){
+  const cards = state.lessonData.flashcards;
+  state.flashcardIndex = Math.max(0, Math.min(cards.length-1, state.flashcardIndex+dir));
+  renderFlashcard();
+}
+
+/* ======================================================
+   QUIZ — FIX: 4 questions, topic-specific
+====================================================== */
+function loadQuiz(){
+  const quizzes = state.lessonData.quiz;
+  state.quizAnswers = {};
+  state.quizTotal = quizzes.length;
+  const area = document.getElementById('quizArea');
+  const complete = document.getElementById('quizComplete');
+  if(complete) complete.style.display='none';
+
+  area.innerHTML = quizzes.map((q,qi)=>`
+    <div class="quiz-card" id="qc-${qi}">
+      <h3>Q${qi+1}. ${q.q}</h3>
+      <div class="quiz-options">
+        ${q.options.map((opt,oi)=>`
+          <button class="quiz-option" id="qo-${qi}-${oi}" onclick="answerQuiz(${qi},${oi})">
+            ${String.fromCharCode(65+oi)}. ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="qfb-${qi}"></div>
+    </div>
+  `).join('');
+}
+
+function answerQuiz(qi, oi){
+  if(state.quizAnswers[qi]!==undefined) return;
+  const quizzes = state.lessonData.quiz;
+  const correct = quizzes[qi].answer;
+  state.quizAnswers[qi] = oi;
+
+  const chosen = document.getElementById(`qo-${qi}-${oi}`);
+  const correctBtn = document.getElementById(`qo-${qi}-${correct}`);
+  const fb = document.getElementById(`qfb-${qi}`);
+
+  document.querySelectorAll(`#qc-${qi} .quiz-option`).forEach(b=>{b.disabled=true;});
+
+  if(oi===correct){
+    chosen.classList.add('correct');
+    fb.className='quiz-feedback show correct-fb';
+    fb.innerHTML=`✅ ${quizzes[qi].explanation}`;
+    addXP(20);
+    state.quizzesCorrect++;
+    saveState();
+  } else {
+    chosen.classList.add('wrong');
+    correctBtn.classList.add('correct');
+    fb.className='quiz-feedback show wrong-fb';
+    fb.innerHTML=`❌ Not quite! ${quizzes[qi].explanation}`;
+  }
+
+  if(Object.keys(state.quizAnswers).length===state.quizTotal){
+    setTimeout(()=>{
+      const correctCount = Object.entries(state.quizAnswers).filter(([qi,oi])=>quizzes[parseInt(qi)].answer===parseInt(oi)).length;
+      document.getElementById('quizScore').textContent = `You got ${correctCount} out of ${state.quizTotal} correct! 🎉`;
+      document.getElementById('quizComplete').style.display='block';
+      confetti();
+    }, 800);
+  }
+}
+
+function markChapterDone(){
+  const ch = state.currentSubject.chapters[state.currentChapterIndex];
+  if(!ch.done){
+    ch.done = true;
+    state.lessonsCompleted++;
+    addXP(50);
+    // Update streak — FIX: proper streak counting
+    const today = new Date().toDateString();
+    if(state.lastStudyDate !== today){
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate()-1);
+      if(state.lastStudyDate === yesterday.toDateString()){
+        state.streak++; // continuing streak
+      } else if(!state.lastStudyDate){
+        state.streak = 1; // first time
+      } else {
+        state.streak = 1; // streak broken, reset to 1
+      }
+      state.lastStudyDate = today;
+    }
+    updateStreakUI();
+    saveState();
+  }
+  renderSidebar(state.currentSubject, state.currentChapterIndex);
+  const cc = document.getElementById('chapterComplete');
+  if(cc){ cc.style.display='block'; cc.scrollIntoView({behavior:'smooth',block:'center'}); }
+  showReward('🏆','Chapter Complete!',`+50 XP earned! Streak: ${state.streak} 🔥`);
+  confetti();
+}
+
+/* ======================================================
+   WORD DEFINITIONS — FIX: global click handler
+====================================================== */
+document.body.addEventListener('click', e=>{
+  if(!state.wordDefEnabled) return;
+  const el = e.target.closest('.key-word');
+  if(!el) return;
+  const def = el.dataset.def;
+  if(!def) return;
+  const tt = document.getElementById('wordTooltip');
+  tt.textContent = def;
+  tt.style.left = (e.clientX+14)+'px';
+  tt.style.top = Math.max(10, e.clientY-50)+'px';
+  tt.classList.add('show');
+  clearTimeout(tt._timer);
+  tt._timer = setTimeout(()=>tt.classList.remove('show'), 3500);
+});
+
+/* ======================================================
+   TEXT TO SPEECH
+====================================================== */
+function voiceGuide(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.88; u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+function toggleTTS(toggle){
+  toggle.classList.toggle('on');
+  state.ttsEnabled = toggle.classList.contains('on');
+  document.getElementById('ttsBar').style.display =
+    (state.ttsEnabled && document.getElementById('page-lesson').classList.contains('active')) ? 'flex':'none';
+  saveState();
+}
+
+function toggleTTSRead(){
+  if(state.isSpeaking){ ttsStop(); } else { ttsReadPage(); }
+}
+
+function ttsReadPage(){
+  if(!window.speechSynthesis){ alert('Text-to-speech not supported.'); return; }
+  window.speechSynthesis.cancel();
+  const ps = document.querySelectorAll('#chunkArea p');
+  const text = Array.from(ps).map(p=>p.innerText).join(' ');
+  if(!text) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 0.85; u.pitch = 1;
+  state.isSpeaking = true;
+  document.getElementById('ttsStatus').textContent = 'Reading...';
+  document.getElementById('ttsPauseBtn').textContent = '⏸ Pause';
+  u.onend = ()=>{ state.isSpeaking=false; document.getElementById('ttsStatus').textContent='Done ✓'; };
+  window.speechSynthesis.speak(u);
+}
+
+function ttsPause(){
+  if(window.speechSynthesis.paused){ window.speechSynthesis.resume(); document.getElementById('ttsPauseBtn').textContent='⏸ Pause'; }
+  else { window.speechSynthesis.pause(); document.getElementById('ttsPauseBtn').textContent='▶ Resume'; }
+}
+
+function ttsStop(){
+  window.speechSynthesis.cancel();
+  state.isSpeaking = false;
+  document.getElementById('ttsStatus').textContent='';
+}
+
+/* ======================================================
+   POMODORO TIMER — FIX: no auto-start, proper state
+====================================================== */
+function setPomoDuration(mins){
+  state.pomoDuration = mins;
+  if(!state.pomoRunning) state.pomoSecondsLeft = mins*60;
+  renderPomoTime();
+  saveState();
+}
+
+function pomoToggle(){
+  if(state.pomoRunning){
+    // Pause
+    clearInterval(state.pomoTimerID);
+    state.pomoTimerID = null;
+    state.pomoRunning = false;
+    document.getElementById('pomoBtnStart').textContent = '▶ Resume';
+  } else {
+    // Start/Resume
+    state.pomoRunning = true;
+    document.getElementById('pomoBtnStart').textContent = '⏸ Pause';
+    state.pomoTimerID = setInterval(()=>{
+      state.pomoSecondsLeft--;
+      renderPomoTime();
+      if(state.pomoSecondsLeft<=0){
+        clearInterval(state.pomoTimerID);
+        state.pomoTimerID = null;
+        state.pomoRunning = false;
+        state.pomoSessions++;
+        document.getElementById('pomoBtnStart').textContent = '▶ Start';
+        const isLong = state.pomoSessions%3===0;
+        showReward('⏰','Session Done!', isLong?'Take a 15 min break! 🌟':'Take a 5 min break!');
+        if(state.voiceGuideEnabled) voiceGuide(isLong?'Excellent! Take a longer break.':'Session done! Short break time.');
+        pomoReset(true);
+      }
+    },1000);
+  }
+}
+
+function pomoReset(keepSessions){
+  clearInterval(state.pomoTimerID);
+  state.pomoTimerID = null;
+  state.pomoRunning = false;
+  state.pomoSecondsLeft = state.pomoDuration*60;
+  if(!keepSessions) state.pomoSessions = 0;
+  document.getElementById('pomoBtnStart').textContent = '▶ Start';
+  renderPomoTime();
+  renderPomoDots();
+}
+
+function renderPomoTime(){
+  const m = Math.floor(state.pomoSecondsLeft/60);
+  const s = state.pomoSecondsLeft%60;
+  const el = document.getElementById('pomodoroTime');
+  if(el) el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  // Ring
+  const total = state.pomoDuration*60;
+  const prog = (total-state.pomoSecondsLeft)/total;
+  const circ = 2*Math.PI*57;
+  const ring = document.getElementById('ringProgress');
+  if(ring) ring.style.strokeDashoffset = circ*(1-prog);
+}
+
+function renderPomoDots(){
+  const el = document.getElementById('pomoDots');
+  if(!el) return;
+  el.innerHTML = [0,1,2].map(i=>`<div class="pomo-dot ${i<(state.pomoSessions%3)?'done':''}"></div>`).join('');
+}
+
+/* ======================================================
+   DASHBOARD
+====================================================== */
+function renderDashboard(){
+  document.getElementById('stat-lessons').textContent = state.lessonsCompleted;
+  document.getElementById('stat-xp').textContent = state.xp;
+  document.getElementById('stat-quizzes').textContent = state.quizzesCorrect;
+  document.getElementById('stat-streak').textContent = state.streak;
+
+  const sp = document.getElementById('subjectProgress');
+  sp.innerHTML = SUBJECTS.map(s=>{
+    const done = s.chapters.filter(c=>c.done).length;
+    const pct = Math.round(done/s.chapters.length*100);
+    return `
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:5px;">
+          <span>${s.icon} ${s.title}</span>
+          <span style="color:var(--text-muted)">${done}/${s.chapters.length}</span>
+        </div>
+        <div style="height:9px;background:var(--surface2);border-radius:5px;overflow:hidden;">
+          <div style="width:${pct}%;height:100%;background:${s.color};border-radius:5px;transition:width 0.5s;"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  // Show timer state without auto-starting
+  renderPomoTime();
+  renderPomoDots();
+  const startBtn = document.getElementById('pomoBtnStart');
+  if(startBtn) startBtn.textContent = state.pomoRunning ? '⏸ Pause' : (state.pomoSecondsLeft<state.pomoDuration*60 ? '▶ Resume' : '▶ Start');
+
+  setTimeout(()=>{
+    if(window.mermaid){
+      mermaid.initialize({startOnLoad:false, theme:'default', securityLevel:'loose'});
+      mermaid.init(undefined, '.mermaid');
+    }
+  }, 200);
+}
+
+/* ======================================================
+   SETTINGS SYNC
+====================================================== */
+function syncSettings(){
+  const ids = {ttsToggle:'ttsEnabled', wordDefToggle:'wordDefEnabled', voiceGuideToggle:'voiceGuideEnabled',
+    animToggle:'no_animation', chunkToggle:'chunkMode'};
+  Object.entries(ids).forEach(([id, key])=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(key==='no_animation') el.classList.toggle('on', document.body.classList.contains('no-animation'));
+    else el.classList.toggle('on', !!state[key]);
+  });
+  const ms = document.getElementById('modeSelect');
+  if(ms) ms.value = state.currentMode;
+  const pd = document.getElementById('pomoDurationSelect');
+  if(pd) pd.value = state.pomoDuration;
+}
+
+function toggleClass(el, cls){ el.classList.toggle(cls); }
+
+function saveSettings(){
+  saveState();
+  showReward('💾','Settings Saved!','Your preferences are updated');
+}
+
+/* ======================================================
+   XP
+====================================================== */
+function addXP(n){
+  state.xp += n;
+  const xb = document.getElementById('xpBar');
+  const xn = document.getElementById('xpNum');
+  if(xb) xb.style.width = (state.xp%100)+'%';
+  if(xn) xn.textContent = state.xp;
+  saveState();
+}
+
+/* ======================================================
+   FOCUS MODE — FIX: Exit button always available
+====================================================== */
+function toggleFocusMode(){
+  state.focusMode = !state.focusMode;
+  document.body.classList.toggle('focus-mode', state.focusMode);
+  document.getElementById('focusModeBtn').style.display = state.focusMode?'none':'';
+  document.getElementById('exitFocusBtn').style.display = state.focusMode?'inline-flex':'none';
+}
+
+/* ======================================================
+   REWARD BANNER
+====================================================== */
+function showReward(icon,title,sub){
+  const b = document.getElementById('rewardBanner');
+  document.getElementById('rewardIcon').textContent = icon;
+  document.getElementById('rewardTitle').textContent = title;
+  document.getElementById('rewardSub').textContent = sub;
+  b.classList.add('show');
+  clearTimeout(b._t);
+  b._t = setTimeout(()=>b.classList.remove('show'),3500);
+}
+
+/* ======================================================
+   CONFETTI
+====================================================== */
+function confetti(){
+  const cols=['#4A5CE8','#E8603A','#2DB89E','#C062B8','#F0A020','#FFD700','#FF6B9D'];
+  for(let i=0;i<45;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=cols[Math.floor(Math.random()*cols.length)];
+    const size=6+Math.random()*9;
+    el.style.width=el.style.height=size+'px';
+    el.style.animationDuration=(1.4+Math.random()*2.2)+'s';
+    el.style.animationDelay=Math.random()*0.6+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4000);
+  }
+}
+
+/* ======================================================
+   CHATBOT — FIX: context-aware answers
+====================================================== */
+function toggleChatbot(){
+  document.getElementById('chatbotWindow').classList.toggle('open');
+}
+
+const BOT_KB = {
+  photosynthesis:'🌱 Plants make food using sunlight, water and CO₂ — releasing oxygen as a bonus! This happens in the leaves. Formula: Sunlight + H₂O + CO₂ → Sugar + O₂.',
+  plant:'🌿 Plants are living organisms that make their own food through photosynthesis. They have roots (absorb water), stem (transports water), leaves (capture sunlight) and flowers (reproduction).',
+  habitat:'🏠 A habitat is the natural home of an animal — the environment where it finds food, shelter, water and mates. Examples: forest, ocean, desert, arctic.',
+  'food chain':'🍖 A food chain shows who eats who. Energy flows: Plants → Herbivores → Carnivores → Top predators. Removing a link can damage the whole chain!',
+  animal:'🐾 Animals are living organisms that must eat other organisms to survive. They can be herbivores (plants only), carnivores (meat only) or omnivores (both).',
+  grammar:'📝 Grammar is the rulebook of language! Key parts: Nouns name things, Verbs show actions, Adjectives describe nouns, Adverbs describe verbs. Every sentence needs a Subject + Verb.',
+  noun:'📖 A noun is a naming word — it names a person (teacher), place (school), thing (book), or idea (happiness). It can be singular or plural.',
+  verb:'⚡ A verb is an action or doing word — run, jump, think, is, have. Every sentence must have a verb!',
+  adjective:'🎨 An adjective describes a noun — big, happy, red, fast, beautiful. It tells us MORE about a noun.',
+  adverb:'💨 An adverb describes a verb — quickly, carefully, very, today. It tells us HOW, WHEN or WHERE an action happens.',
+  computer:'💻 A computer is an electronic machine that processes data. Key parts: CPU (brain), RAM (short-term memory), Storage (permanent memory), GPU (graphics), Monitor (output), Keyboard (input).',
+  cpu:'🧠 CPU = Central Processing Unit — the brain of the computer! It performs billions of calculations per second and controls everything the computer does.',
+  ram:'💾 RAM = Random Access Memory — the computer\'s fast, short-term working memory. It holds what you\'re doing RIGHT NOW. Lost when you turn off the computer!',
+  internet:'🌐 The internet is a massive global network connecting billions of devices. Data travels as packets through cables and routers. The World Wide Web is the websites that use the internet.',
+  algorithm:'⚙️ An algorithm is a step-by-step set of instructions to solve a problem. Cooking recipes, morning routines — all algorithms! Computers run algorithms to do EVERYTHING.',
+  fraction:'🍕 A fraction shows part of a whole. 1/2 = one piece out of two equal pieces. The bottom number (denominator) = total parts. Top number (numerator) = parts you have.',
+  photosyn:'🌱 Photosynthesis: Plants + Sunlight + Water + CO₂ = Sugar + Oxygen. Happens in leaves!',
+  continent:'🌍 There are 7 continents: Asia (largest), Africa, North America, South America, Europe, Australia (smallest), and Antarctica (no permanent people). They broke apart from Pangaea!',
+  climate:'🌡️ Climate is the long-term weather pattern of a region (30+ years). Weather is what happens TODAY. Climate zones: Tropical (hot/wet), Arid (dry), Temperate (4 seasons), Polar (freezing).',
+  'climate change':'🌡️ Climate change is global warming caused by burning fossil fuels, which releases greenhouse gases (CO₂, methane) that trap heat. Earth\'s average temp has risen ~1.1°C since industrialisation.',
+  egypt:'🔺 Ancient Egypt was one of the world\'s first civilizations (3100 BC) on the Nile River. Famous for pyramids, pharaohs (god-kings), hieroglyphics (picture writing) and mummies!',
+  'middle ages':'🏰 The Middle Ages (500-1500 AD) featured the feudal system (King→Lords→Knights→Peasants), Crusades (religious wars) and the Black Death (plague killing 1/3 of Europe).',
+  adhd:'🎯 ADHD tips: Try Focus Mode (hides distractions), use the Pomodoro timer (short study sessions), chunked reading (one section at a time), and take regular breaks!',
+  dyslexia:'📖 Dyslexia tips: Enable Dyslexia mode (warm background + Atkinson font), use Text-to-Speech to listen instead of read, make text bigger in Settings!',
+  autism:'🌿 Autism tips: Try Autism mode (calm green, consistent layout), enable "No Animations" in Settings, and use Voice Guidance for predictable audio cues.',
+  help:'😊 I can help with: explaining ANY topic from lessons, giving study tips, simplifying text, or answering questions about ADHD/dyslexia/autism modes. Just ask!',
+  simplify:'🛠️ Go to Subjects → Self Learning to paste any text and I\'ll break it into simple parts for your current mode!',
+  default:'🌟 Great question! Ask me about any topic — photosynthesis, grammar, computers, history, geography and more. I\'ll explain it simply! You can also try: "Tips for dyslexia" or "What is an algorithm?"'
+};
+
+async function sendChat(){
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+
+  const messages = document.getElementById('chatMessages');
+
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg user';
+  userMsg.textContent = msg;
+  messages.appendChild(userMsg);
+
+  const thinkMsg = document.createElement('div');
+  thinkMsg.className = 'msg bot thinking';
+  thinkMsg.textContent = '🤔 Thinking...';
+  messages.appendChild(thinkMsg);
+
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+
+  await new Promise(r=>setTimeout(r,600));
+  thinkMsg.remove();
+
+  const lower = msg.toLowerCase();
+  let response = '';
+
+  // 1. Search current lesson chunks
+  if(state.lessonData && state.lessonData.chunks){
+    for(const chunk of state.lessonData.chunks){
+      const plain = chunk.text.replace(/<[^>]+>/g,'');
+      const words = lower.replace(/\b(what|is|are|how|why|explain|tell me|about|the|a|an)\b/g,'').trim();
+      if(words.length>2 && plain.toLowerCase().includes(words.split(' ')[0])){
+        response = `📖 From the current lesson: ${plain.substring(0,180)}...`;
+        break;
+      }
+    }
+  }
+
+  // 2. Knowledge base
+  if(!response){
+    for(const [key,val] of Object.entries(BOT_KB)){
+      if(lower.includes(key)){ response=val; break; }
+    }
+  }
+
+  // 3. Default
+  if(!response) response = BOT_KB.default;
+
+  // 4. Simplify prefix
+  if(lower.includes('simpl')||lower.includes('easy')||lower.includes('eli5')){
+    response = '🧒 In simple terms: '+response;
+  }
+
+  const botMsg = document.createElement('div');
+  botMsg.className = 'msg bot';
+  botMsg.textContent = response;
+  messages.appendChild(botMsg);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+/* ======================================================
+   INIT
+====================================================== */
+function init(){
+  applyMode(state.currentMode);
+  renderSubjects();
+  updateStreakUI();
+  document.getElementById('stat-lessons').textContent = state.lessonsCompleted;
+  document.getElementById('stat-xp').textContent = state.xp;
+  document.getElementById('stat-quizzes').textContent = state.quizzesCorrect;
+
+  // Exit focus btn always hidden initially
+  document.getElementById('exitFocusBtn').style.display = 'none';
+  document.getElementById('focusModeBtn').style.display = '';
+
+  // Mermaid init
+  if(window.mermaid){
+    mermaid.initialize({startOnLoad:false, theme:'default', securityLevel:'loose'});
+  }
+}
+
+init();
+</script>
+</body>
+</html>
